@@ -1,0 +1,70 @@
+/* classe aventurier */
+
+class Personnage{
+	/* attributs communs à tous les personnages */
+	
+	/* constructeur de personnage */
+	
+	/* méthodes communes à tous les personnages */
+}
+
+/* interface pour tous les type de personnages */
+class SpecialMethodes{
+	
+	public function coupSpecial();
+}
+
+
+/* classe enfant de Personnage */
+class Voleur extends Personnage implements SpecialMethodes{
+	/* attributs propres au Voleur */
+	
+	/* constructeur de voleur qui récupère les attributs et méthodes de Personnage */
+	
+	/* implémentation de l'interface */
+	public function coupSpecial(){
+		/* backstab */
+	}
+	
+}
+
+class Guerrier extends Personnage{
+	/* attributs propres au Guerrier */
+	
+	/* constructeur de voleur qui récupère les attributs et méthodes de Personnage */
+	
+	/* implémentation de l'interface */
+	public function coupSpecial(){
+		/* double attaque */
+	}
+	
+}
+
+class Mage extends Personnage{
+	/* attributs propres au Mage */
+	
+	/* constructeur de voleur qui récupère les attributs et méthodes de Personnage */
+	
+	/* implémentation de l'interface */
+	public function coupSpecial(){
+		/* boule de feu */
+	}
+}
+
+class MOb{
+	/*  */
+}
+
+class MobTir extends Mob implements SpecialMethodes{
+	/* implémentation de l'interface */
+	public function coupSpecial(){
+		/* double tir */
+	}
+}
+
+class MobCorpsACorps extends Mob implements SpecialMethodes{
+	/* implémentation de l'interface */
+	public function coupSpecial(){
+		/* german supplex */
+	}
+}

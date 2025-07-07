@@ -10,4 +10,24 @@ class Tools{
     public static function circo($rayon){
         return (2*$rayon) * self::$pi;
     }
+
+    public static function makeSlug($text){
+        /* convertir en minuscule */
+        $text = strtolower($text);
+
+        /* remplacer les caractères accentués */
+        $text = preg_replace(array('/&.*;/','/\W/'),
+                '-',
+                preg_replace('/&([A-Za-z]{1,2})(grave|acute|circ|cedil|uml|lig);/',
+                         '$1',
+                     htmlentities($text,ENT_NOQUOTES,'UTF-8')));
+        
+        /* tirets multiples */
+        $text = preg_replace('/-+/', '-', $text);
+
+        /* retirer les tirets en début et fin de chaîne */
+        $text = trim($text, '-');
+
+        return $text;
+    }
 }

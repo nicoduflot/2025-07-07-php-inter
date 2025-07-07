@@ -1,10 +1,46 @@
 <?php
 session_start();
 require './src/Classes/Banque/Compte.php';
+require './src/Utils/Tools.php';
 use App\Banque\Compte;
+use Utils\Tools;
+
 $monCompte = unserialize($_SESSION['monCompte']);
 //var_dump($monCompte);
 //var_dump($monCompte->getNom());
+
+/*echo Tools::makeSlug('[toto aime sa tata ) @ wesh frère');*/
+
+if(isset($_POST['createFile']) && $_POST['createFile'] === 'Envoyer' ){
+    if($_POST['titre'] !== ''){
+        /*
+        on va utiliser le titre pour créer un nom de fichier
+        => créer une méthode dans tools de création de chaîne en slug
+        */
+        $slug = Tools::makeSlug($_POST['titre']);
+        $dirYear = date('Y');
+        $dirMonth = date('m');
+        $prefixFile = date('d-h-i');
+        $fileName = $prefixFile. '-' .$slug;
+        $pathDir = './files/'. $dirYear. '/' . $dirMonth;
+        $pathFile = $pathDir. '/' .$fileName . '.txt';
+        /*echo $pathFile;*/
+        /* création des répertoires s'ils n'existent pas */
+        if( !file_exists($pathFile) ){
+            mkdir($pathDir, 0777, true);
+        }
+        /* création du fichier texte */
+        if( !$file = fopen($pathFile, 'w+') ){
+            echo 'impossible de créer le fichier : '.$pathFile.'';
+        }else{
+            fwrite($file, $_POST['titre']);
+            fwrite($file, $_POST['message']);
+            fclose($file);
+            header('location: ./formulaire.php');
+        }
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -251,7 +287,7 @@ $monCompte = unserialize($_SESSION['monCompte']);
                 <h3>Téléverser des fichiers</h3>
                 <?php  ?>
                     <div class=" alert-dismissible fade show" role="alert">
-                        <?php echo $messageUploaded ?>
+                        
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 <?php  ?>

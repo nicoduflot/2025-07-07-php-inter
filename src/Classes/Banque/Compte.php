@@ -268,4 +268,28 @@ class Compte{
         return true;
     }
 
+    public function typeCompte() : string {
+        $className = get_class($this);
+        return $className;
+    }
+
+    /**
+     * @return string
+     */
+    public function infoCompte(): string {
+        $fichCompte = '';
+        $etatSolde = ($this->getSolde() < 0)? 'débiteur': 'créditeur';
+        $fichCompte = '
+        <div>
+            <div class="my-2"><b>'. $this->typeCompte() .'</b></div>
+            <div class="my-2"><b>'. $this->getNom() . ' ' . $this->getPrenom() .'</b></div>
+            <div class="my-2">Agence n° <b>'. $this->getNumagence() .'</b></div>
+            <div class="my-2">RIB <b>'. $this->getRib() .'</b></div>
+            <div class="my-2">IBAN <b>'. $this->getIban() .'</b></div>
+            <div class="my-2">Compte '. $etatSolde .'<b> '. $this->getSolde() .' '. $this->getDevise() .'</b></div>
+        </div>
+        ';
+        return $fichCompte;
+    }
+
 }

@@ -71,19 +71,6 @@ require './src/Classes/Banque/Compte.php';
                     Les attributs et les méthodes de l'objet sont donc encapsulés dans la classe. L'utilisateur de l'objet ne doit pas modifier le code de la classe mais utilisera l'objet via ses méthodes. En général il n'utilise pas directement ses attributs, ils seront <q>privés</q>
                 </p>
                 <h3>Créer la classe <q>Compte</q></h3>
-                <?php
-                $monCompte = new Compte('Duflot', 'Nicolas', 'CCP-987654', '0123456', 'NOM RIB', 'MON IBAN FR', 2500, 400);
-                var_dump($monCompte);
-                var_dump($monCompte);
-                var_dump($monCompte->getNom());
-                var_dump($monCompte->setNom('Durand'));
-
-                $compteDestinataire = new Compte('Magic', 'Eric', 'CCP-456789', '6543210', 'RIB ERIC', 'IBAN FR ERIC', 2500, 400);
-
-                $monCompte->virement(400, $compteDestinataire);
-                var_dump($monCompte->getSolde());
-                var_dump($compteDestinataire->getSolde());
-                ?>
                 <p>
                     On crée les attributs en privé
                 </p>
@@ -97,7 +84,19 @@ require './src/Classes/Banque/Compte.php';
                     Comme les attributs sont privés, il faut, pour pouvoir les lire et / ou les modifier, créer des méthodes particulières, nommées getter ( ou Assesseur, pour les lire) et setter (ou Mutateur, pour les modifier).
                 </p>
                 <?php
-                
+                $monCompte = new Compte('Duflot', 'Nicolas', 'CCP-987654', '0123456', 'NOM RIB', 'MON IBAN FR', 2500, 400);
+                var_dump($monCompte);
+                var_dump($monCompte);
+                var_dump($monCompte->getNom());
+                var_dump($monCompte->setNom('Durand'));
+
+                $compteDestinataire = new Compte('Magic', 'Eric', 'CCP-456789', '6543210', 'RIB ERIC', 'IBAN FR ERIC', 2500, 400);
+
+                $monCompte->virement(400, $compteDestinataire);
+                var_dump($monCompte->getSolde());
+                var_dump($compteDestinataire->getSolde());
+                echo $monCompte->typeCompte();
+                echo $monCompte->infoCompte();
                 ?>
                 <h2>Les classes statiques</h2>
                 <p>

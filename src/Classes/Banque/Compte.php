@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Banque;
+
 class Compte{
     /* Attributs en privé */
     private string $nom;
@@ -292,4 +294,20 @@ class Compte{
         return $fichCompte;
     }
 
+    /* Méthodes de sauvegarde de l'objet en BDD */
+
+    /*  Méthode static de l'objet*/
+    public static function helloWorld(){
+        return 'Hello World';
+    }
+
+    /* 
+    destructeur : une méthode qui s'éxécute uniquement lors de la destruction de l'objet 
+    Par exemple quand on change de page et que l'objet n'est pas conservé d'une page à l'autre
+    */
+
+    public function __destruct()
+    {
+        // auto-sauvegarde de l'objet en bdd
+    }
 }

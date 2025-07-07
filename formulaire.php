@@ -1,5 +1,10 @@
 <?php
-
+session_start();
+require './src/Classes/Banque/Compte.php';
+use App\Banque\Compte;
+$monCompte = unserialize($_SESSION['monCompte']);
+//var_dump($monCompte);
+//var_dump($monCompte->getNom());
 ?>
 <!DOCTYPE html>
 <html lang="fr">

@@ -139,8 +139,17 @@ $monCompte = unserialize($_SESSION['monCompte']);
             </article>
             <article class="col-md-6">
                 <?php
-                
-
+                var_dump($_GET);
+                if( isset($_GET['formeSent']) && $_GET['formeSent'] === 'Envoyer' ){
+                    $nom = isset($_GET['nom'])? $_GET['nom'] : '';
+                    $email = isset($_GET['email'])? $_GET['email'] : '';
+                    $typeDemande = isset($_GET['type-demande'])? $_GET['type-demande'] : '';
+                    $personne = isset($_GET['personne'])? $_GET['personne'] : '';
+                    $diffEmail = isset($_GET['diff-email'])? $_GET['diff-email'] : '';
+                    $diffTel = isset($_GET['diff-tel'])? $_GET['diff-tel'] : '';
+                    $diffRadio = isset($_GET['diff-radio'])? $_GET['diff-radio'] : '';
+                    $diffTv = isset($_GET['diff-tv'])? $_GET['diff-tv'] : '';
+                    $detail = isset($_GET['detail'])? $_GET['detail'] : '';
                     ?>
                     <div class="h4">Résultats du formulaire</div>
                     <p>
@@ -156,16 +165,17 @@ $monCompte = unserialize($_SESSION['monCompte']);
                         <?= $personne ?>
                     </p>
                     <p>
-                        Emailling : <?= $difEmail ?><br />
-                        Téléphone : <?= $difTel ?><br />
-                        Radio : <?= $difRadio ?><br />
-                        TV : <?= $difTv ?><br />
+                        Emailling : <?= $diffEmail ?> <br />
+                        Téléphone : <?= $diffTel ?> <br />
+                        Radio : <?= $diffRadio ?> <br />
+                        TV : <?= $diffTv ?> <br />
                     </p>
                     <p>
-                        <?= $detail ?>
+                       <?= $detail ?>
                     </p>
                     <?php
-                
+                    /*echo "<p> $detail </p>";*/
+                }
                 ?>
                 <h2>Les fichiers</h2>
                 <h3>Ouverture et fermeture d'un fichier</h3>
@@ -173,19 +183,48 @@ $monCompte = unserialize($_SESSION['monCompte']);
                     fopen() et fclose()
                 </p>
                 <?php
-                
+                if( !$monFichierTexte = fopen('./files/file.txt', 'r') ){
+                    echo '<p>Echec lors de l\'ouverture du fichier</p>';
+                }else{
+                    echo '<p>Le fichier est présent et ouvert</p>';
+                    fclose($monFichierTexte);
+                }
                 ?>
                 <h3>Lire un fichier</h3>
                 <p>
                     fread()
                 </p>
+                <pre>
                 <?php
-                
+                if( !$monFichierTexte = fopen('./files/file.txt', 'r') ){
+                    echo '<p>Echec lors de l\'ouverture du fichier</p>';
+                }else{
+                    echo '<p>Le fichier est présent et ouvert</p>';
+                    echo fread($monFichierTexte, filesize('./files/file.txt'));
+                    fclose($monFichierTexte);
+                }
                 ?>
+                </pre>
                 <h4>Lire un fichier en parcellaire fgets()</h4>
-                <?php
                 
+                <?php
+                if( !$monFichierTexte = fopen('./files/file.txt', 'r') ){
+                    echo '<p>Echec lors de l\'ouverture du fichier</p>';
+                }else{
+                    echo '<p>Le fichier est présent et ouvert</p>';
+                    //echo fread($monFichierTexte, filesize('./files/file.txt'));
+                    echo '<p>'.fgets($monFichierTexte) . '</p>';
+                    echo '<p>'.fgets($monFichierTexte, 10) . '</p>';
+                    echo '<p>'.fgets($monFichierTexte) . '</p>';
+                    echo '<p>';
+                    while( !feof($monFichierTexte) ){
+                        echo fgets($monFichierTexte);
+                    }
+                    echo '</p>';
+                    fclose($monFichierTexte);
+                }
                 ?>
+                
             </article>
             <article class="col-md-6">
                 <h3>Créer des fichiers</h3>

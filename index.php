@@ -112,7 +112,8 @@ use Utils\Tools;
                     Il est d'ailleurs IMPOSSIBLE de créer une instance de classe si elle ne possèdent pas de constructeur
                 </p>
                 <?php
-                echo Tools::$pi;
+                echo Tools::$pi.'<br />';
+                echo Tools::circo(3);
                 ?>
             </article>
             <article>

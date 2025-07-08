@@ -1,5 +1,6 @@
 <?php
-
+require './src/Utils/Tools.php';
+use Utils\Tools;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -50,14 +51,15 @@
                 </p>
                 <code>
                     //exemple<br />
-                    $bdd = new PDO("mysql:host=localhost;dbname=026-php-inter-poo;charset=UTF8", "root", "");
+                    $bdd = new PDO("mysql:host=localhost;dbname=2025-07-07-php-inter;charset=UTF8", "root", "");
                 </code>
                 <h3>Tester la connexion</h3>
                 <?php
                 try{
-                    $bdd = new PDO('mysql:host=localhost;dbname=026-php-inter-poo;charset=UTF8', 'root', '', array(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION));
+                    $bdd = new PDO('mysql:host=localhost;dbname=2025-07-07-php-inter;charset=UTF8', 'root', '', array(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION));
                     echo '<p>la connexion fonctionne</p>';
-                    var_dump($bdd);
+                    /*var_dump($bdd);*/
+                    Tools::prePrint($bdd);
                 }catch(Exception $e){
                     echo '<p>Erreur de connexion : '. $e->getMessage().'</p>';
                 }
@@ -74,6 +76,8 @@
                     $response = $bdd->query("SELECT * FROM `jeux_video`");
                 </code>
                 <?php
+                $response = $bdd->query("SELECT * FROM `jeux_video`");
+                Tools::prePrint($response);
                 ?>
                 <p>
                     $response contient désormais le jeu d'enregistrements récupéré via la requête.
@@ -87,6 +91,16 @@
                     print_r($unEnregistrement);<br />
                 </code>
                 <?php
+                $unEnregistrement = $response->fetch(PDO::FETCH_ASSOC);
+                Tools::prePrint($unEnregistrement);
+                Tools::prePrint($unEnregistrement['nom']);
+                $unEnregistrement = $response->fetch(PDO::FETCH_NUM);
+                Tools::prePrint($unEnregistrement);
+                Tools::prePrint($unEnregistrement[1]);
+                $unEnregistrement = $response->fetch(PDO::FETCH_BOTH);
+                Tools::prePrint($unEnregistrement);
+                Tools::prePrint($unEnregistrement[1]);
+                Tools::prePrint($unEnregistrement['nom']);
                 ?>
                 <p>
                     fetch() renvoie l'enregistrement actuel où se trouve le curseur dans le jeu d'enregistrement.
@@ -99,6 +113,9 @@
                     $response->closeCursor();
                 </code>
                 <?php
+                $response->closeCursor();
+                $unEnregistrement = $response->fetch(PDO::FETCH_ASSOC);
+                Tools::prePrint($unEnregistrement);
                 ?>
             </article>
             <article>
@@ -110,6 +127,8 @@
                     dans un tableau généré par une boucle
                 </p>
                 <?php
+                /*  lancer la requête suivante SELECT * FROM `Jeux_video` ORDER BY `ID` DESC */
+                
                 ?>
                 <div class="table-responsive" style="height: 300px;">
                     <table class="table table-dark table-striped">

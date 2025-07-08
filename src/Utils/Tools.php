@@ -30,4 +30,11 @@ class Tools{
 
         return $text;
     }
+
+    /* outil d'affichage de données "brutes" */
+    public static function prePrint($data){
+        echo '<code style="font-size: 1rem"><pre>';
+        var_dump($data);
+        echo '</pre></code>';
+    }
 }

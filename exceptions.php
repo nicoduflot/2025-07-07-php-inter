@@ -1,5 +1,7 @@
 <?php
+require './src/Classes/MonException.php';
 
+use App\MonException;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -79,19 +81,73 @@
                     Par exemple, n'avoir que getMessage() au retour d'une exception.
                 </p>
                 <?php
-                
+                function multiplier2($x, $y){
+                    if( !is_numeric($x) || !is_numeric($y) ){
+                        throw new Exception('Les deux valeurs doivent être numériques');
+                    }
+
+                    if( func_num_args() > 2 ){
+                        throw new MonException('La fonction n\'admet que deux arguments');
+                    }
+                    return $x * $y;
+                }
+
+                try{
+                    echo multiplier2(20, 12).'<br />';
+                    echo multiplier2(20, 12, 6).'<br />';
+                    echo multiplier2(5, 12).'<br />';
+                }catch(MonException $e){
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        Une exception a été lancée<br />
+                        Message : '.$e->getMessage().'<br />
+                        Code : '.$e->getCode().'<br />
+                        Fichier : '.$e->getFile().'<br />
+                        Ligne : '.$e->getLine().'<br />
+                        Trace : '.$e->getTraceAsString().'<br />
+                        Précédent : '.$e->getPrevious().'<br />
+                        Toto : '.$e->getToto().'<br />
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                    </div>
+                    ';
+                }catch(Exception $e){
+                    /*var_dump($e);*/
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        Une exception a été lancée<br />
+                        Message : '.$e->getMessage().'<br />
+                        Code : '.$e->getCode().'<br />
+                        Fichier : '.$e->getFile().'<br />
+                        Ligne : '.$e->getLine().'<br />
+                        Trace : '.$e->getTraceAsString().'<br />
+                        Précédent : '.$e->getPrevious().'<br />
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                    </div>
+                    ';
+                }
                 ?>
                 <h4>Exception dans PDO</h4>
                 <p>
-                    Il existe des exceptions pour PDO, mais elles ne sont pas natives dans Php, il faut
-                    les installer, il existe des dépendances sur packagist installable avec composer
+                    Il existe des exceptions pour PDO
                 </p>
-                <code>
-                    composer require php-kit/ext-pdo
-                </code>
                 <p>
                     <?php
-                    
+                    try{
+                        $testBdd = new PDO('mysql:host=localhost; dbname=toto;charset=UTF8', 'root', '');
+                    }catch(PDOException $e){
+                        echo '
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            Une exception a été lancée<br />
+                            Message : '.$e->getMessage().'<br />
+                            Code : '.$e->getCode().'<br />
+                            Fichier : '.$e->getFile().'<br />
+                            Ligne : '.$e->getLine().'<br />
+                            Trace : '.$e->getTraceAsString().'<br />
+                            Précédent : '.$e->getPrevious().'<br />
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                        </div>
+                        ';
+                    }
                     ?>
                 </p>
             </article>

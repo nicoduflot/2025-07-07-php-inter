@@ -29,7 +29,7 @@
                 <h3>Principes</h3>
                 <p>
                     PDO ou "Php Data Object" est un moyen de se connecter à une base de données et un moyen
-                    de manipuler cette bdd. Son avantage tiens dans le fait qu'on utilise les mêmes méthodes pour
+                    de manipuler cette bdd. Son avantage tient dans le fait qu'on utilise les mêmes méthodes pour
                     manipuler des bases de données différentes (MySql, PostGre, Oracle, etc.).
                 </p>
                 <h2>Connexion avec PDO</h2>

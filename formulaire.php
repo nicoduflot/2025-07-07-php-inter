@@ -41,6 +41,8 @@ if(isset($_POST['createFile']) && $_POST['createFile'] === 'Envoyer' ){
     }
 }
 
+/* Upload de fichiers */
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">

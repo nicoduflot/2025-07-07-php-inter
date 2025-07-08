@@ -54,7 +54,13 @@
                 </code>
                 <h3>Tester la connexion</h3>
                 <?php
-                
+                try{
+                    $bdd = new PDO('mysql:host=localhost;dbname=026-php-inter-poo;charset=UTF8', 'root', '', array(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION));
+                    echo '<p>la connexion fonctionne</p>';
+                    var_dump($bdd);
+                }catch(Exception $e){
+                    echo '<p>Erreur de connexion : '. $e->getMessage().'</p>';
+                }
                 ?>
             </article>
             <article>

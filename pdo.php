@@ -128,7 +128,8 @@ use Utils\Tools;
                 </p>
                 <?php
                 /*  lancer la requête suivante SELECT * FROM `Jeux_video` ORDER BY `ID` DESC */
-                
+                $response = $bdd->query("SELECT * FROM `jeux_video` ORDER BY `ID` DESC");
+                Tools::prePrint($response->rowCount());
                 ?>
                 <div class="table-responsive" style="height: 300px;">
                     <table class="table table-dark table-striped">
@@ -145,29 +146,29 @@ use Utils\Tools;
                         </thead>
                         <tbody>
                             <?php
-                            
+                            while($donnees = $response->fetch(PDO::FETCH_ASSOC)){
                             ?>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?= $donnees['nom'] ?></td>
+                                    <td><?= $donnees['possesseur'] ?></td>
+                                    <td><?= $donnees['prix'] ?></td>
+                                    <td><?= $donnees['console'] ?></td>
+                                    <td><?= $donnees['nbre_joueurs_max'] ?></td>
+                                    <td><?= $donnees['commentaires'] ?></td>
                                     <td style="width: 250px;">
                                         <a href="./actionJV.php?action=mod&idJV=<?php  ?>"><button class="btn btn-primary">Modifier</button></a> 
                                         <a href="./actionJV.php?action=sup&idJV=<?php  ?>"><button class="btn btn-danger">Supprimer</button></a>
                                     </td>
                                 </tr>
                             <?php
-                            
+                            }
                             
                             ?>
                         </tbody>
                     </table>
                 </div>
                 <?php
-
+                $response->closeCursor();
                 ?>
             </article>
             <article class="col-lg-6">
@@ -178,6 +179,37 @@ use Utils\Tools;
                     Si on veut pouvoir choisir des paramètres pour la recherche (comme des filtres), il faut utiliser
                     les méthodes PDO de préparation de requête.
                 </p>
+                <?php
+                /* Lier par clef dans la requête */
+
+                $sql = 'SELECT * FROM `jeux_video` WHERE `ID` = :id ';
+                $response = $bdd->prepare($sql);
+                $idJeux = 1;
+                $response->bindParam(':id', $idJeux, PDO::PARAM_INT);
+                $response->execute();
+                $unEnregistrement = $response->fetch(PDO::FETCH_ASSOC);
+                Tools::prePrint($unEnregistrement);
+
+                /* Lier par ordre dans la requête */
+
+                $sql = 'SELECT * FROM `jeux_video` WHERE `ID` = ? ';
+                $response = $bdd->prepare($sql);
+                $idJeux = 1;
+                $response->bindParam(1, $idJeux, PDO::PARAM_INT);
+                $response->execute();
+                $unEnregistrement = $response->fetch(PDO::FETCH_ASSOC);
+                Tools::prePrint($unEnregistrement);
+
+                /* lier par clef dans la requête avec plusieurs paramètres dans execute */
+                $sql = 'SELECT * FROM `jeux_video` WHERE `ID` = :id and `possesseur` LIKE :possesseur ';
+                $response = $bdd->prepare($sql);
+                $response->execute(
+                    ['id' => 1, 'possesseur' => 'Florent']
+                );
+                Tools::prePrint($response);
+                $unEnregistrement = $response->fetch(PDO::FETCH_ASSOC);
+                Tools::prePrint($unEnregistrement);
+                ?>
                 <form>
                     <fieldset class="form-group my-2">
                         <label for="possesseur" class="form-label">Possesseur</label>

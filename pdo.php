@@ -228,7 +228,41 @@ use Utils\Tools;
                     </p>
                 </form>
                 <?php
-                
+                $tabFields = [];
+                $tabConditions = [];
+                $conditions = '';
+                if( isset($_GET['soumettre']) &&  $_GET['soumettre'] === 'soumettre'){
+                    if(isset($_GET['possesseur']) && $_GET['possesseur'] !== ''){
+                        $tabFields['possesseur'] = $_GET['possesseur'];
+                        $tabConditions[] = ' `possesseur` = :possesseur ';
+                    }
+                    if(isset($_GET['prixmax']) && $_GET['prixmax'] !== ''){
+                        $tabFields['prixmax'] = $_GET['prixmax'];
+                        $tabConditions[] = ' `prix` <= :prixmax ';
+                    }
+                    if(isset($_GET['console']) && $_GET['console'] !== ''){
+                        $tabFields['console'] = $_GET['console'];
+                        $tabConditions[] = ' `console` = :console ';
+                    }
+                    Tools::prePrint($tabFields);
+                    Tools::prePrint($tabConditions);
+
+                    if(count($tabConditions) > 0){
+                        for($i = 0; $i < count($tabConditions); $i++){
+                            $conditions .= ( ($i === 0)? ' WHERE ': ' AND ' ) ;
+                            $conditions .= $tabConditions[$i];
+                        }
+                    }
+
+                    Tools::prePrint($conditions);
+                    
+                }
+
+                $sql = 'SELECT * FROM `jeux_video` ' . $conditions . ' ORDER BY `nom`';
+
+                $req = $bdd->prepare($sql);
+                $req->execute($tabFields);
+
                 ?>
                 <div class="table-responsive" style="height: 300px;">
                     <table class="table table-dark table-striped">
@@ -244,19 +278,19 @@ use Utils\Tools;
                         </thead>
                         <tbody>
                             <?php
-                            
+                            while($donnees = $req->fetch(PDO::FETCH_ASSOC)){
                             ?>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?= $donnees['nom'] ?></td>
+                                    <td><?= $donnees['possesseur'] ?></td>
+                                    <td><?= $donnees['prix'] ?></td>
+                                    <td><?= $donnees['console'] ?></td>
+                                    <td><?= $donnees['nbre_joueurs_max'] ?></td>
+                                    <td><?= $donnees['commentaires'] ?></td>
                                     
                                 </tr>
                             <?php
-                            
+                            }
                             ?>
                         </tbody>
                     </table>

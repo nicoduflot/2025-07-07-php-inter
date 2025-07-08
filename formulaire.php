@@ -41,7 +41,33 @@ if(isset($_POST['createFile']) && $_POST['createFile'] === 'Envoyer' ){
     }
 }
 
+$messageUpload = '';
+$upload = false;
 /* Upload de fichiers */
+if(isset($_POST['uploadFile']) && $_POST['uploadFile'] === 'Charger'){
+    $uploadDir = './uploads/';
+    $uploadFile = $uploadDir . basename($_FILES['fichier']['name']);
+    /*
+    echo $uploadFile;
+    var_dump($_FILES);
+    var_dump($GLOBALS);
+    */
+    if( !file_exists($uploadDir) ){
+        mkdir($uploadDir, 0777, true);
+    }
+
+    if(file_exists($uploadFile) ){
+        /*echo 'ce fichier existe déjà';*/
+        $uploadFile = $uploadDir . 'copy-' . basename($_FILES['fichier']['name']) ;
+    }
+    
+    if(move_uploaded_file($_FILES['fichier']['tmp_name'], $uploadFile)){
+        $messageUpload = 'Votre fichier '. $_FILES['fichier']['name'] .' est bien téléchargé';
+        $upload = true;
+    }else{
+        $messageUpload = 'Fichier erroné ou erreur téléversement';
+    }
+}
 
 ?>
 <!DOCTYPE html>
@@ -287,13 +313,13 @@ if(isset($_POST['createFile']) && $_POST['createFile'] === 'Envoyer' ){
             </article>
             <article class="col-md-6">
                 <h3>Téléverser des fichiers</h3>
-                <?php  ?>
-                    <div class=" alert-dismissible fade show" role="alert">
-                        
+                <?php if($messageUpload !== ''): ?>
+                    <div class="alert <?= ($upload)? 'alert-success': 'alert-warning' ?> alert-dismissible fade show" role="alert">
+                        <?= $messageUpload ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                <?php  ?>
-                <form enctype="multipart/form-data" method="post" id="uploadFile">
+                <?php endif; ?>
+                <form enctype="multipart/form-data" method="post" action="./formulaire.php" id="uploadFile">
                     <input type="hidden" name="MAX_FILE_SIZE" value="30000000" />
                     <div class="mb-3">
                         <label class="form-label" for="fichier">Fichier :</label>

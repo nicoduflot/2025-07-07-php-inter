@@ -37,7 +37,32 @@
                     echo multiplier(113, 42);<br />
                 </code>
                 <?php
-                
+                function multiplier($x, $y){
+                    if( !is_numeric($x) || !is_numeric($y) ){
+                        throw new Exception('Les deux valeurs doivent être numériques');
+                    }
+                    return $x * $y;
+                }
+
+                try{
+                    echo multiplier(20, 12).'<br />';
+                    echo multiplier('test', 12).'<br />';
+                    echo multiplier(5, 12).'<br />';
+                }catch(Exception $e){
+                    /*var_dump($e);*/
+                    echo '
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        Une exception a été lancée<br />
+                        Message : '.$e->getMessage().'<br />
+                        Code : '.$e->getCode().'<br />
+                        Fichier : '.$e->getFile().'<br />
+                        Ligne : '.$e->getLine().'<br />
+                        Trace : '.$e->getTraceAsString().'<br />
+                        Précédent : '.$e->getPrevious().'<br />
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                    </div>
+                    ';
+                }
                 ?>
                 <p>
                     Si on n'utilise pas de try-catch sur des expression lançant des Exceptions,

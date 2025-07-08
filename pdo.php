@@ -156,8 +156,8 @@ use Utils\Tools;
                                     <td><?= $donnees['nbre_joueurs_max'] ?></td>
                                     <td><?= $donnees['commentaires'] ?></td>
                                     <td style="width: 250px;">
-                                        <a href="./actionJV.php?action=mod&idJV=<?php  ?>"><button class="btn btn-primary">Modifier</button></a> 
-                                        <a href="./actionJV.php?action=sup&idJV=<?php  ?>"><button class="btn btn-danger">Supprimer</button></a>
+                                        <a href="./actionJV.php?action=mod&idJV=<?= $donnees['ID'] ?>"><button class="btn btn-primary">Modifier</button></a> 
+                                        <a href="./actionJV.php?action=sup&idJV=<?= $donnees['ID'] ?>"><button class="btn btn-danger">Supprimer</button></a>
                                     </td>
                                 </tr>
                             <?php

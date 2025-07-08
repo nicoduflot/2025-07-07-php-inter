@@ -1,5 +1,25 @@
 <?php
 
+$formMod = false;
+$formSup = false;
+
+if( isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && $_GET['idJV'] !== '' ){
+    $idJV = $_GET['idJV'];
+    $formMod = ($_GET['action'] === 'mod');
+    $formSup = ($_GET['action'] === 'sup');
+    /*
+    - une fois récupérer les infos, on requête dans la bdd selon idJV
+    - on récupère toutes les infos
+    - selon les veleurs mod ou sup, on affiche le bon formulaire
+    - et on traite les formulaire choisi
+    */
+}
+
+/* cas modification */
+
+/* cas de suppression */
+
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">

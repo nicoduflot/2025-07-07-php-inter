@@ -287,7 +287,6 @@ use Utils\Tools;
                                     <td><?= $donnees['console'] ?></td>
                                     <td><?= $donnees['nbre_joueurs_max'] ?></td>
                                     <td><?= $donnees['commentaires'] ?></td>
-                                    
                                 </tr>
                             <?php
                             }
@@ -296,7 +295,7 @@ use Utils\Tools;
                     </table>
                 </div>
                 <?php
-                
+                $req->closeCursor();
                 ?>
             </article>
             <article class="col-lg-6">
@@ -322,8 +321,8 @@ use Utils\Tools;
                         <input type="text" class="form-control" name="prix" id="prix" />
                     </fieldset>
                     <fieldset class="form-group my-2">
-                        <label for="nbJmax" class="form-label">Nombre de joueurs max</label>
-                        <input type="text" class="form-control" name="nbJmax" id="nbJmax" />
+                        <label for="nbre_joueurs_max" class="form-label">Nombre de joueurs max</label>
+                        <input type="text" class="form-control" name="nbre_joueurs_max" id="nbre_joueurs_max" />
                     </fieldset>
                     <fieldset class="form-group my-2">
                         <label for="commentaires" class="form-label">Commentaire</label>
@@ -334,6 +333,46 @@ use Utils\Tools;
                     </p>
                 </form>
                 <?php
+                tools::prePrint($_POST);
+                if( isset($_POST['ajoutJeu']) && $_POST['ajoutJeu'] === 'ajoutJeu' ){
+                    $params = $_POST;
+                    unset($params['ajoutJeu']);
+                    Tools::prePrint($params);
+
+                    $keys = '(';
+                    $values = '(';
+                    $i = 0;
+                    foreach($params as $key => $value){
+                        if($i !== 0){
+                            $keys .= ', ';
+                            $values .= ', ';
+                        }
+                        $i++;
+                        $keys .= $key;
+                        $values .= ':'.$key;
+                    }
+
+                    $keys .= ')';
+                    $values .= ')';
+
+                    $sql = 'INSERT INTO `jeux_video` '.$keys . ' VALUES '.$values .';';
+                    Tools::prePrint($sql);
+                    /*
+                    INSERT INTO `jeux_video` 
+                        (nom, possesseur, console, prix, nbre_joueurs_max, commentaires) 
+                    VALUES 
+                        (:nom, :possesseur, :console, :prix, :nbre_joueurs_max, :commentaires);
+                    */
+
+                    $req = $bdd->prepare($sql);
+                    $req->execute($params) or die(Tools::prePrint($bdd->errorInfo())) ;
+                    ?>
+                    <script>
+                        document.location.href= './pdo.php';
+                    </script>
+                    <?php
+
+                }
                 ?>
             </article>
         </section>

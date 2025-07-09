@@ -59,11 +59,31 @@ class Tools
         }
         return $bdd;
     }
-
-    public static function modBdd($sql, $params = []){
+    
+    /**
+     * Permet toutes les requête donnéesen BDD mais si c'est un insert, ne renvoie pas l'id du dernier éléments inserré
+     * @param string $sql - requête sql en bindparam 
+     * @param array $params : tableau des paramètres liés (bindparams)
+     * @return mixed
+     */
+    public static function modBdd($sql, $params = []): mixed{
         $bdd = self::setBdd();
         $req = $bdd->prepare($sql);
         $req->execute($params);
         return $req;
     }
+
+    /**
+     * réservé à l'insertion car renvoi l'id de l'enregistrement créé dans la table
+     * @param string $sql - requête sql en bindparam 
+     * @param array $params : tableau des paramètres liés (bindparams)
+     * @return mixed
+     */
+    public static function insertBdd($sql, $params = []): mixed{
+        $bdd = self::setBdd();
+        $req = $bdd->prepare($sql);
+        $req->execute($params);
+        return $bdd->lastInsertId();
+    }
+
 }

@@ -4,15 +4,15 @@ namespace App\Banque;
 
 class Compte{
     /* Attributs en privé */
-    private string $nom;
-    private string $prenom;
-    private string $numcompte;
-    private string $numagence;
-    private string $rib;
-    private string $iban;
-    private float $solde;
-    private float $decouvert;
-    private string $devise;
+    protected string $nom;
+    protected string $prenom;
+    protected string $numcompte;
+    protected string $numagence;
+    protected string $rib;
+    protected string $iban;
+    protected float $solde;
+    protected float $decouvert;
+    protected string $devise;
 
     /**
      * @param string $nom - le nom du détenteur du compte
@@ -279,9 +279,9 @@ class Compte{
      * @return string
      */
     public function infoCompte(): string {
-        $fichCompte = '';
+        $ficheCompte = '';
         $etatSolde = ($this->getSolde() < 0)? 'débiteur': 'créditeur';
-        $fichCompte = '
+        $ficheCompte = '
         <div>
             <div class="my-2"><b>'. $this->typeCompte() .'</b></div>
             <div class="my-2"><b>'. $this->getNom() . ' ' . $this->getPrenom() .'</b></div>
@@ -291,7 +291,7 @@ class Compte{
             <div class="my-2">Compte '. $etatSolde .'<b> '. $this->getSolde() .' '. $this->getDevise() .'</b></div>
         </div>
         ';
-        return $fichCompte;
+        return $ficheCompte;
     }
 
     /* Méthodes de sauvegarde de l'objet en BDD */

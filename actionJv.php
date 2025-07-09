@@ -11,12 +11,6 @@ if (isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
     $idJV = $_GET['idJV'];
     $formMod = ($_GET['action'] === 'mod');
     $formSup = ($_GET['action'] === 'sup');
-    /*
-    - une fois récupéré les infos, on requête dans la bdd selon idJV
-    - on récupère toutes les infos
-    - selon les valeurs mod ou sup, on affiche le bon formulaire
-    - et on traite les formulaire choisi
-    */
     $sql = 'SELECT * FROM `jeux_video` WHERE `ID` = :id ';
     $params = ['id' => $idJV];
     $req = Tools::modBdd($sql, $params);
@@ -76,10 +70,8 @@ if(isset($_POST['modBdd'])){
 }
 
 if($modBdd){
-    // éxécution de la requête
     $params = $_POST;
     unset($params['modBdd']);
-    //tools::prePrint($params);
     Tools::modBdd($sql, $params);
     header('location: ./pdo.php');
 }

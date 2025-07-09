@@ -371,7 +371,6 @@ use Utils\Tools;
                         document.location.href= './pdo.php';
                     </script>
                     <?php
-
                 }
                 ?>
             </article>

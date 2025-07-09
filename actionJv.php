@@ -39,10 +39,44 @@ if (isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
     }
 }
 
-/* cas modification */
+/* cas modification ou cas de suppression */
+$modBdd = false;
+if(isset($_POST['modBdd'])){
+    switch($_POST['modBdd']){
+        case 'modJeu':
+            $sql ='
+            UPDATE 
+                `jeux_video` 
+            SET
+                `nom` = :nom,
+                `possesseur` = :possesseur,
+                `console` = :console,
+                `prix` = :prix,
+                `nbre_joueurs_max` = :nbre_joueurs_max,
+                `commentaires` = :commentaires,
+                `date_modif` = now()
+            WHERE 
+                `ID` = :ID;
+            ';
+            $modBdd = true;
+        break;
+        case 'supJeu':
+            $sql = '
+            DELETE FROM 
+                `jeux_video` 
+            WHERE 
+                `ID` = :ID;
+            ';
+            $modBdd = true;
+        break;
+        default: 
+            $modBdd = false;
+    }
+}
 
-/* cas de suppression */
-
+if($modBdd){
+    // éxécution de la requête
+}
 
 ?>
 <!DOCTYPE html>

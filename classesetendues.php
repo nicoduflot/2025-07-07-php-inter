@@ -1,5 +1,8 @@
 <?php
-
+require './src/Classes/Banque/CompteCheque.php';
+require './src/Utils/Tools.php';
+use App\Banque\CompteCheque;
+use Utils\Tools;
 
 ?>
 <!DOCTYPE html>
@@ -71,6 +74,13 @@
                 </header>
                 <?php
                 /* ici on testera le compte chèque */
+                $compteCheque = new CompteCheque('Duflot', 'Nicolas', 'CCP-987654', '0123456', 'NOM RIB', 'MON IBAN FR', '0123456789', '9876', 2500, 400);
+                Tools::prePrint($compteCheque);
+                Tools::prePrint($compteCheque->getCarte());
+                Tools::prePrint($compteCheque->getCarte()->getCodepin());
+                Tools::prePrint($compteCheque->getCarte()->getNumcarte());
+                $destinataire = new CompteCheque('Morty', 'Rick', 'CCP-456789', '0123456', 'NOM RIB', 'MON IBAN FR', '9876543210', '6789', 2500, 400);
+                echo $compteCheque->payerParCarte('0123456789', '9876', 400, $destinataire);
                 ?>
             </article>
             <article class="col-lg-6">

@@ -1,18 +1,42 @@
 <?php
+require './src/Utils/Tools.php';
+
+use Utils\Tools;
 
 $formMod = false;
 $formSup = false;
 
-if( isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && $_GET['idJV'] !== '' ){
+if (isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && $_GET['idJV'] !== '') {
     $idJV = $_GET['idJV'];
     $formMod = ($_GET['action'] === 'mod');
     $formSup = ($_GET['action'] === 'sup');
     /*
-    - une fois récupérer les infos, on requête dans la bdd selon idJV
+    - une fois récupéré les infos, on requête dans la bdd selon idJV
     - on récupère toutes les infos
-    - selon les veleurs mod ou sup, on affiche le bon formulaire
+    - selon les valeurs mod ou sup, on affiche le bon formulaire
     - et on traite les formulaire choisi
     */
+    $sql = 'SELECT * FROM `jeux_video` WHERE `ID` = :id ';
+    $params = ['id' => $idJV];
+    $req = Tools::modBdd($sql, $params);
+
+    if(!$infosJeu = $req->fetch(PDO::FETCH_ASSOC)){
+        $nom = '';
+        $possesseur = '';
+        $console = '';
+        $prix = '';
+        $nbre_joueurs_max = '';
+        $commentaires = '';
+        $id = '';
+    }else{
+        $nom = $infosJeu['nom'];
+        $possesseur = $infosJeu['possesseur'];
+        $console = $infosJeu['console'];
+        $prix = $infosJeu['prix'];
+        $nbre_joueurs_max = $infosJeu['nbre_joueurs_max'];
+        $commentaires = $infosJeu['commentaires'];
+        $id = $infosJeu['ID'];
+    }
 }
 
 /* cas modification */
@@ -23,6 +47,7 @@ if( isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,6 +56,7 @@ if( isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
     include './src/Utils/head.php';
     ?>
 </head>
+
 <body data-bs-theme="dark">
     <header>
         <div class="container">
@@ -46,7 +72,7 @@ if( isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
                 <header>
                     <h2>Gestion des jeux</h2>
                 </header>
-                <?php if($formMod){ ?>
+                <?php if ($formMod && $id !== '') { ?>
                     <h3>Modifier le jeu </h3>
                     <form method="post" action="./actionJV.php">
                         <input type="hidden" name="ID" value="<?php echo $id ?>" />
@@ -80,8 +106,8 @@ if( isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
                     </form>
                 <?php
                 }
-                if($formSup){
-                ?>    
+                if ($formSup && $id !== '') {
+                ?>
                     <h3>Supprimer le jeu </h3>
                     <form method="post" action="./actionJV.php">
                         <input type="hidden" name="ID" value="<?php echo $id ?>" />
@@ -93,6 +119,9 @@ if( isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
                     </form>
                 <?php
                 }
+                if($id === ''){
+                    echo '<h3>Le jeu recherché n\'existe pas</h3>';
+                }
                 ?>
             </article>
         </section>
@@ -101,4 +130,5 @@ if( isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
     include './src/Widgets/footer.php';
     ?>
 </body>
+
 </html>

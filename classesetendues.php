@@ -1,7 +1,13 @@
 <?php
 require './src/Classes/Banque/CompteCheque.php';
+require './src/Classes/Banque/CompteInteret.php';
+require './src/Classes/Aventure/Guerrier.php';
+require './src/Classes/Aventure/Voleur.php';
 require './src/Utils/Tools.php';
 use App\Banque\CompteCheque;
+use App\Banque\CompteInteret;
+use JDR\Guerrier;
+use JDR\Voleur;
 use Utils\Tools;
 
 ?>
@@ -91,6 +97,10 @@ use Utils\Tools;
                 </header>
                 <?php
                 /* ici on testera le compte intérêts */
+                $compteInterets = new CompteInteret('Duflot', 'Nicolas', 'CCP-987654', '0123456', 'NOM RIB', 'MON IBAN FR', 2500, 0.05, 400);
+                tools::prePrint($compteInterets);
+                echo $compteInterets->infoCompte();
+                echo $compteInterets->crediterInterets();
                 ?>
                 <div>
                     <?php
@@ -287,6 +297,14 @@ $frere->contenuCoffre();
                 <p>
                     Normalement, on ne peut que créer des comptes à intérêts ou des comptes chèques, donc la classe mère Compte devrait être une classe abstraite, définissant tous les attributs et toutes les méthodes communes aux classes filles, et seulement dans les classes filles on définit les méthodes qui sont différentes.
                 </p>
+                <?php
+                $guerrier = new Guerrier('Conan');
+                $voleur = new Voleur('Arsène');
+                tools::prePrint($guerrier);
+                tools::prePrint($voleur);
+                echo $guerrier->taper($voleur);
+                echo $voleur->multi($guerrier);
+                ?>
             </article>
         </section>
         <section class="row">

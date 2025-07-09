@@ -80,7 +80,9 @@ use Utils\Tools;
                 Tools::prePrint($compteCheque->getCarte()->getCodepin());
                 Tools::prePrint($compteCheque->getCarte()->getNumcarte());
                 $destinataire = new CompteCheque('Morty', 'Rick', 'CCP-456789', '0123456', 'NOM RIB', 'MON IBAN FR', '9876543210', '6789', 2500, 400);
-                echo $compteCheque->payerParCarte('0123456789', '9876', 400, $destinataire);
+                echo $compteCheque->payerParCarte('0123456789', '9876', 400, $destinataire).'<br />';
+                echo CompteCheque::generatePin().'<br />';
+                echo CompteCheque::generateCardNumber().'<br />';
                 ?>
             </article>
             <article class="col-lg-6">

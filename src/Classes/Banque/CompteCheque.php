@@ -73,4 +73,31 @@ class CompteCheque extends Compte{
             return $message;
         }
     }
+
+    public function infoCompte(): string
+    {
+        $infoCompte = parent::infoCompte();
+        $infoCompte .= '<div class="my-2">Numéro de carte : <b>'.$this->getCarte()->getNumcarte().'</b></div>';
+        return $infoCompte;
+    }
+
+    public static function generatePin() : string{
+        $pin = ''.rand(0, 9).rand(0, 9).rand(0, 9).rand(0, 9);
+
+        return $pin;
+    }
+
+    public static function generateCardNumber(): string{
+        $numcarte = ''.
+            self::generatePin(). ' '.
+            self::generatePin(). ' '.
+            self::generatePin(). ' '.
+            self::generatePin()
+        ;
+
+        return $numcarte;
+    }
+
+    /* méthode de sauvegarde dans la bdd du compte */
+    
 }

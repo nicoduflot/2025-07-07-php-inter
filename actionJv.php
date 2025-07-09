@@ -5,7 +5,8 @@ use Utils\Tools;
 
 $formMod = false;
 $formSup = false;
-
+$modBdd = false;
+$id = '';
 if (isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && $_GET['idJV'] !== '') {
     $idJV = $_GET['idJV'];
     $formMod = ($_GET['action'] === 'mod');
@@ -40,7 +41,7 @@ if (isset($_GET['action']) && isset($_GET['idJV']) && $_GET['action'] !== '' && 
 }
 
 /* cas modification ou cas de suppression */
-$modBdd = false;
+
 if(isset($_POST['modBdd'])){
     switch($_POST['modBdd']){
         case 'modJeu':
@@ -76,6 +77,11 @@ if(isset($_POST['modBdd'])){
 
 if($modBdd){
     // éxécution de la requête
+    $params = $_POST;
+    unset($params['modBdd']);
+    //tools::prePrint($params);
+    Tools::modBdd($sql, $params);
+    header('location: ./pdo.php');
 }
 
 ?>
@@ -153,7 +159,7 @@ if($modBdd){
                     </form>
                 <?php
                 }
-                if($id === ''){
+                if($id === '' && $modBdd === false){
                     echo '<h3>Le jeu recherché n\'existe pas</h3>';
                 }
                 ?>

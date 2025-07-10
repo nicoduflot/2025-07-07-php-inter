@@ -7,6 +7,8 @@ require './src/Utils/Tools.php';
 require './src/Classes/Utrain/PublicUser.php';
 require './src/Classes/Utrain/FreePublicUser.php';
 require './src/Classes/Utrain/InternUser.php';
+require './src/Classes/CorpoInc/UtilisateurStandard.php';
+require './src/Classes/CorpoInc/Editeur.php';
 use App\Banque\CompteCheque;
 use App\Banque\CompteInteret;
 use JDR\Guerrier;
@@ -14,6 +16,8 @@ use JDR\Voleur;
 use App\Utrain\PublicUser;
 use App\Utrain\FreePublicUser;
 use App\Utrain\InternUser;
+use App\CorpoInc\UtilisateurStandard;
+use App\CorpoInc\Editeur;
 use Utils\Tools;
 
 ?>
@@ -489,7 +493,22 @@ $frere->contenuCoffre();
                 </p>
                 <pre>
                 <?php
+                $utilisateurStandard = new UtilisateurStandard('Doudou', 'bisounours');
+                Tools::prePrint($utilisateurStandard);
+                Tools::prePrint($utilisateurStandard->getLogin());
+                Tools::prePrint($utilisateurStandard->getStatut());
+                Tools::prePrint($utilisateurStandard->verifierMotDePasse('groscalin'));
+                Tools::prePrint($utilisateurStandard->verifierMotDePasse('bisounours'));
+                Tools::prePrint($utilisateurStandard->getPermissions());
                 
+                $editeur = new Editeur('Doudou', 'bisounours');
+                Tools::prePrint($editeur);
+                Tools::prePrint($editeur->getLogin());
+                Tools::prePrint($editeur->getStatut());
+                Tools::prePrint($editeur->verifierMotDePasse('groscalin'));
+                Tools::prePrint($editeur->verifierMotDePasse('bisounours'));
+                Tools::prePrint($editeur->getPermissions());
+
                 ?>
                 </pre>
             </article>

@@ -1,6 +1,9 @@
 <?php
+/*
 require './src/Classes/MonException.php';
 require './src/Utils/Tools.php';
+*/
+include './src/includes/autoload.php';
 use App\MonException;
 ?>
 <!DOCTYPE html>

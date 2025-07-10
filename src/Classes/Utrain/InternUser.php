@@ -1,6 +1,6 @@
 <?php
 namespace App\Utrain;
-require_once './src/Classes/Utrain/Utrain_Interface.php';
+
 use App\Utrain\Utrain_Interface;
 class InternUser implements Utrain_Interface{
    protected $nomUtilisateur;

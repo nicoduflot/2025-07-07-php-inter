@@ -1,6 +1,6 @@
 <?php
-require './src/Utils/Tools.php';
-
+/*require './src/Utils/Tools.php';*/
+include './src/includes/autoload.php';
 use Utils\Tools;
 
 $formMod = false;

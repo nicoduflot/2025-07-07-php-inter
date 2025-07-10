@@ -1,4 +1,5 @@
 <?php
+/*
 require './src/Classes/Banque/CompteCheque.php';
 require './src/Classes/Banque/CompteInteret.php';
 require './src/Classes/Aventure/Guerrier.php';
@@ -11,6 +12,8 @@ require './src/Classes/CorpoInc/UtilisateurStandard.php';
 require './src/Classes/CorpoInc/Editeur.php';
 require './src/Classes/CorpoInc/Administrateur.php';
 require './src/Classes/CorpoInc/UtilisateurFactory.php';
+*/
+include './src/includes/autoload.php';
 use App\Banque\CompteCheque;
 use App\Banque\CompteInteret;
 use JDR\Guerrier;

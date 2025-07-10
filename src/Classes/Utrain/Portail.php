@@ -1,6 +1,5 @@
 <?php
 namespace App\Utrain;
-require_once './src/Classes/Utrain/Utrain_Interface.php';
 
 class Portail implements Utrain_Interface{
 

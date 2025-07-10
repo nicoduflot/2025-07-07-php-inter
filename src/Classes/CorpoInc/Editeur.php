@@ -1,6 +1,5 @@
 <?php
 namespace App\CorpoInc;
-require_once 'Utilisateur.php';
 use App\CorpoInc\Utilisateur;
 
 class Editeur extends Utilisateur{

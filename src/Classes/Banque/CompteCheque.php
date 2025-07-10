@@ -1,7 +1,6 @@
 <?php
 namespace App\Banque;
-require 'Carte.php';
-require_once 'Compte.php';
+
 use App\Banque\Carte;
 
 class CompteCheque extends Compte{

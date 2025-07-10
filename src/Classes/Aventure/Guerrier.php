@@ -1,6 +1,5 @@
 <?php
 namespace JDR;
-require_once 'Perso.php';
 use JDR\Perso;
 
 class Guerrier extends Perso{

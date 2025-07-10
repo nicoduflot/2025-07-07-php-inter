@@ -1,11 +1,16 @@
 <?php
 session_start();
 /* il faut charger la classe pour pouvoir utiliser l'objet */
+include './src/includes/autoload.php';
+/*
 require './src/Classes/Banque/Compte.php';
 require './src/Utils/Tools.php';
+*/
 /* Quand on déclare un namespace pour une classe, il faut expliquer que l'on utilise cette classe via le namespace */
 use App\Banque\Compte;
 use Utils\Tools;
+
+/*Tools::prePrint(dirname(__DIR__));*/
 
 ?>
 <!DOCTYPE html>

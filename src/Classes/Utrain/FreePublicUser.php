@@ -1,7 +1,5 @@
 <?php
 namespace App\Utrain;
-require_once 'PublicUser.php';
-require_once 'Toto_Interface.php';
 
 class FreePublicUser extends PublicUser{
     protected $age;

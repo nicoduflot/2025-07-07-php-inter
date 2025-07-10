@@ -3,9 +3,6 @@ namespace App\CorpoInc;
 
 use InvalidArgumentException;
 
-require_once 'UtilisateurStandard.php';
-require_once 'Editeur.php';
-require_once 'Administrateur.php';
 
 class UtilisateurFactory{
     public static function creer($type, $login, $motdepasse){

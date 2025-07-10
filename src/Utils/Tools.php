@@ -1,7 +1,7 @@
 <?php
 
 namespace Utils;
-require_once 'Config_interface.php';
+
 use PDO;
 use Exception;
 

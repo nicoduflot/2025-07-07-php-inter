@@ -1,6 +1,5 @@
 <?php
 namespace App\Banque;
-require_once 'Compte.php';
 
 class CompteInteret extends Compte{
     private $taux;

@@ -1,8 +1,10 @@
 <?php
 session_start();
+/*
 require './src/Classes/Banque/Compte.php';
 require './src/Utils/Tools.php';
-use App\Banque\Compte;
+*/
+include './src/includes/autoload.php';
 use Utils\Tools;
 
 $monCompte = unserialize($_SESSION['monCompte']);

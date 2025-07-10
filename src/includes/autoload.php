@@ -1,13 +1,16 @@
 <?php
 /* il faut créer un mapping entre les namespace et la place physique des classes dans le projet */
-const ALIASES = [
+/*const ALIASES = [
     'App' => 'Classes',
     'JDR' => 'Classes\\Aventure',
     'App\\Banque' => 'Classes\\Banque',
     'App\\CorpoInc' => 'Classes\\CorpoInc',
     'App\\Utrain' => 'Classes\\Utrain',
     'Utils' => 'Utils'
-];
+];*/
+
+require_once './src/Utils/Config_interface.php';
+use Utils\Config_Interface;
 
 spl_autoload_register(function($classe){
 
@@ -32,8 +35,8 @@ spl_autoload_register(function($classe){
     }
     $classeName = $namespaceparts[count($namespaceparts)-1];
 
-    if(array_key_exists($namespace, ALIASES)){
-        $namespace = ALIASES[$namespace];
+    if(array_key_exists($namespace, Config_Interface::AUTOLOAD_ALIASES)){
+        $namespace = Config_Interface::AUTOLOAD_ALIASES[$namespace];
     }
 
     $paths = [

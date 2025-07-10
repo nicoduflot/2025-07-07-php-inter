@@ -1,4 +1,7 @@
 <?php
+
+use Utils\Tools;
+
 include './src/includes/autoload.php';
 ?>
 <!DOCTYPE html>
@@ -41,6 +44,15 @@ include './src/includes/autoload.php';
                     <h2>Les Comptes enregistrés</h2>
                 </header>
                 <?php
+                $sqlCompte = '
+                    SELECT 
+                        * 
+                    FROM 
+                        `compte` 
+                    WHERE 
+                        `typecompte` = \'Compte\';
+                ';
+                $request = Tools::modBdd($sqlCompte);
                 ?>
                 <div class="table-responsive">
                     <table class="table table-dark table-striped">
@@ -59,22 +71,23 @@ include './src/includes/autoload.php';
                         </thead>
                         <tbody>
                             <?php
+                            while($compte = $request->fetch(PDO::FETCH_ASSOC)){
                             ?>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?= $compte['nom'] ?></td>
+                                    <td><?= $compte['prenom'] ?></td>
+                                    <td><?= $compte['numcompte'] ?></td>
+                                    <td><?= $compte['numagence'] ?></td>
+                                    <td><?= $compte['rib'] ?></td>
+                                    <td><?= $compte['iban'] ?></td>
+                                    <td><?= $compte['solde'] ?></td>
+                                    <td><?= $compte['decouvert'] ?></td>
                                     <td>
-                                        <a href="./gestionCompte.php?action=show&uniqueid=" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
+                                        <a href="./gestionCompte.php?action=show&id=<?= $compte['id'] ?>" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
                                     </td>
                                 </tr>
                             <?php
-
+                            }
                             ?>
                         </tbody>
                     </table>
@@ -118,7 +131,7 @@ include './src/includes/autoload.php';
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
+                                    <td><a href="./gestionCompte.php?action=show&uniqueid=" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
                                     </td>
                                 </tr>
                             <?php
@@ -162,7 +175,7 @@ include './src/includes/autoload.php';
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        <a href="./gestionCompte.php?action=show&uniqueid=<?php echo $compte['uniqueid'] ?>" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
+                                        <a href="./gestionCompte.php?action=show&uniqueid=<?php  ?>" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
                                     </td>
                                 </tr>
 

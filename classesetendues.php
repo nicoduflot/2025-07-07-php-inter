@@ -4,10 +4,16 @@ require './src/Classes/Banque/CompteInteret.php';
 require './src/Classes/Aventure/Guerrier.php';
 require './src/Classes/Aventure/Voleur.php';
 require './src/Utils/Tools.php';
+require './src/Classes/Utrain/PublicUser.php';
+require './src/Classes/Utrain/FreePublicUser.php';
+require './src/Classes/Utrain/InternUser.php';
 use App\Banque\CompteCheque;
 use App\Banque\CompteInteret;
 use JDR\Guerrier;
 use JDR\Voleur;
+use App\Utrain\PublicUser;
+use App\Utrain\FreePublicUser;
+use App\Utrain\InternUser;
 use Utils\Tools;
 
 ?>
@@ -398,6 +404,10 @@ $frere->contenuCoffre();
                     </code>
                 </p>
                 <?php
+                $publicUser = new PublicUser('Durand');
+                tools::prePrint($publicUser);
+                $freePublicUser = new FreePublicUser('Dudu', 5);
+                tools::prePrint($freePublicUser);
 
                 ?>
             </article>
@@ -411,9 +421,9 @@ $frere->contenuCoffre();
                 <p>
                     <code>
                         &lt;?php<br />
-                        class InternUser implements Interface_Utrain{<br />
                         namespace App\Utrain;<br />
                         use App\Utrain\Interface_Utrain;<br />
+                        class InternUser implements Interface_Utrain{<br />
                         &nbsp;&nbsp;&nbsp;protected $nomUtilisateur;<br />
                         &nbsp;&nbsp;&nbsp;protected $statut;<br />
                         &nbsp;&nbsp;&nbsp;protected $prixAbo;<br />
@@ -444,7 +454,10 @@ $frere->contenuCoffre();
                     </code>
                 </p>
                 <?php
-
+                $internUserPeon = new InternUser('Charlot');
+                Tools::prePrint($internUserPeon);
+                $internUserCadre = new InternUser('Charlot', 'Cadre');
+                Tools::prePrint($internUserCadre);
                 ?>
             </article>
         </section>

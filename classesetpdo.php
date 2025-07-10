@@ -1,5 +1,5 @@
 <?php
-
+require './src/Utils/Tools.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">

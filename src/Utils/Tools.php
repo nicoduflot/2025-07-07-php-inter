@@ -1,13 +1,13 @@
 <?php
 
 namespace Utils;
-
+require_once 'Config_interface.php';
 use PDO;
 use Exception;
 
 /* Tools est une classe statique : pas de constructeur donc pas de création d'instance de la classe */
 
-class Tools
+class Tools implements Config_Interface
 {
 
     static $pi = 3.1415926535898;
@@ -50,7 +50,7 @@ class Tools
         echo '</pre></code>';
     }
 
-    public static function setBdd($dbHost = 'localhost', $dbName = '2025-07-07-php-inter', $dbUser = 'root', $dbPsw = '')
+    public static function setBdd($dbHost = self::DBHOST, $dbName = self::DBNAME, $dbUser = self::DBUSER, $dbPsw = self::DBPSW)
     {
         try {
             $bdd = new PDO("mysql:host=$dbHost;dbname=$dbName;charset=UTF8", $dbUser, $dbPsw, array(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION));
@@ -84,6 +84,10 @@ class Tools
         $req = $bdd->prepare($sql);
         $req->execute($params);
         return $bdd->lastInsertId();
+    }
+
+    public static function classActive($page) : string {
+        return (basename($_SERVER['PHP_SELF']) === $page)?' active ': '';
     }
 
 }

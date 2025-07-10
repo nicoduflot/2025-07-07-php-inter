@@ -1,6 +1,6 @@
 <?php
 require './src/Classes/MonException.php';
-
+require './src/Utils/Tools.php';
 use App\MonException;
 ?>
 <!DOCTYPE html>

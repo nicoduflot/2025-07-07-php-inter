@@ -1,2 +1,3 @@
 uploads/*
 !uploads/important
+/src/Utils/Config_Interface.php

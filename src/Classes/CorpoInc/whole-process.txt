@@ -1,0 +1,334 @@
+Exemple de factory php.
+
+- Une classe utilisateur simple avec login et mot de passe et statut (type utilisateur, admin et éditeur)
+- Une classe employé avec la différence entre simple employés, cadres et cadres managers
+- Une classe accès parking avec un accès à trois zones, employés, cadres et managers.
+
+<?php
+
+// ============================================
+// 1. CLASSES UTILISATEUR
+// ============================================
+
+abstract class Utilisateur {
+    protected $login;
+    protected $motDePasse;
+    protected $statut;
+    
+    public function __construct($login, $motDePasse) {
+        $this->login = $login;
+        $this->motDePasse = password_hash($motDePasse, PASSWORD_DEFAULT);
+    }
+    
+    public function getLogin() { return $this->login; }
+    public function getStatut() { return $this->statut; }
+    
+    public function verifierMotDePasse($motDePasse) {
+        return password_verify($motDePasse, $this->motDePasse);
+    }
+    
+    abstract public function getPermissions();
+}
+
+class UtilisateurStandard extends Utilisateur {
+    protected $statut = 'utilisateur';
+    
+    public function getPermissions() {
+        return ['lecture', 'modification_profil'];
+    }
+}
+
+class Administrateur extends Utilisateur {
+    protected $statut = 'admin';
+    
+    public function getPermissions() {
+        return ['lecture', 'ecriture', 'suppression', 'gestion_utilisateurs', 'administration'];
+    }
+}
+
+class Editeur extends Utilisateur {
+    protected $statut = 'editeur';
+    
+    public function getPermissions() {
+        return ['lecture', 'ecriture', 'modification_contenu', 'publication'];
+    }
+}
+
+// FACTORY UTILISATEUR
+class UtilisateurFactory {
+    public static function creer($type, $login, $motDePasse) {
+        switch (strtolower($type)) {
+            case 'utilisateur':
+            case 'standard':
+                return new UtilisateurStandard($login, $motDePasse);
+            
+            case 'admin':
+            case 'administrateur':
+                return new Administrateur($login, $motDePasse);
+            
+            case 'editeur':
+                return new Editeur($login, $motDePasse);
+            
+            default:
+                throw new InvalidArgumentException("Type d'utilisateur inconnu : $type");
+        }
+    }
+}
+
+// ============================================
+// 2. CLASSES EMPLOYÉ
+// ============================================
+
+abstract class Employe {
+    protected $nom;
+    protected $prenom;
+    protected $email;
+    protected $typeEmploye;
+    protected $salaire;
+    
+    public function __construct($nom, $prenom, $email) {
+        $this->nom = $nom;
+        $this->prenom = $prenom;
+        $this->email = $email;
+    }
+    
+    public function getNom() { return $this->nom; }
+    public function getPrenom() { return $this->prenom; }
+    public function getEmail() { return $this->email; }
+    public function getType() { return $this->typeEmploye; }
+    public function getSalaire() { return $this->salaire; }
+    
+    abstract public function getResponsabilites();
+    abstract public function calculerPrime();
+}
+
+class EmployeSimple extends Employe {
+    protected $typeEmploye = 'employe_simple';
+    protected $salaire = 2500;
+    
+    public function getResponsabilites() {
+        return ['Exécution des tâches assignées', 'Respect des procédures'];
+    }
+    
+    public function calculerPrime() {
+        return $this->salaire * 0.05; // 5% de prime
+    }
+}
+
+class Cadre extends Employe {
+    protected $typeEmploye = 'cadre';
+    protected $salaire = 4500;
+    
+    public function getResponsabilites() {
+        return [
+            'Supervision d\'équipe', 
+            'Gestion de projets', 
+            'Reporting hiérarchique'
+        ];
+    }
+    
+    public function calculerPrime() {
+        return $this->salaire * 0.12; // 12% de prime
+    }
+}
+
+class CadreManager extends Employe {
+    protected $typeEmploye = 'cadre_manager';
+    protected $salaire = 7000;
+    
+    public function getResponsabilites() {
+        return [
+            'Direction d\'équipes multiples', 
+            'Stratégie départementale', 
+            'Budget et ressources',
+            'Décisions stratégiques'
+        ];
+    }
+    
+    public function calculerPrime() {
+        return $this->salaire * 0.20; // 20% de prime
+    }
+}
+
+// FACTORY EMPLOYÉ
+class EmployeFactory {
+    public static function creer($type, $nom, $prenom, $email) {
+        switch (strtolower($type)) {
+            case 'employe':
+            case 'simple':
+            case 'employe_simple':
+                return new EmployeSimple($nom, $prenom, $email);
+            
+            case 'cadre':
+                return new Cadre($nom, $prenom, $email);
+            
+            case 'manager':
+            case 'cadre_manager':
+                return new CadreManager($nom, $prenom, $email);
+            
+            default:
+                throw new InvalidArgumentException("Type d'employé inconnu : $type");
+        }
+    }
+}
+
+// ============================================
+// 3. CLASSES ACCÈS PARKING
+// ============================================
+
+abstract class AccesParking {
+    protected $typeAcces;
+    protected $zones = [];
+    protected $horaires;
+    
+    public function getTypeAcces() { return $this->typeAcces; }
+    public function getZones() { return $this->zones; }
+    public function getHoraires() { return $this->horaires; }
+    
+    abstract public function peutAcceder($zone);
+    public function afficherAcces() {
+        return "Accès {$this->typeAcces} : zones " . implode(', ', $this->zones);
+    }
+}
+
+class AccesEmploye extends AccesParking {
+    protected $typeAcces = 'EMPLOYE';
+    protected $zones = ['Zone A'];
+    protected $horaires = '8h-18h';
+    
+    public function peutAcceder($zone) {
+        return in_array($zone, ['Zone A']);
+    }
+}
+
+class AccesCadre extends AccesParking {
+    protected $typeAcces = 'CADRE';
+    protected $zones = ['Zone A', 'Zone B'];
+    protected $horaires = '7h-20h';
+    
+    public function peutAcceder($zone) {
+        return in_array($zone, ['Zone A', 'Zone B']);
+    }
+}
+
+class AccesManager extends AccesParking {
+    protected $typeAcces = 'MANAGER';
+    protected $zones = ['Zone A', 'Zone B', 'Zone VIP'];
+    protected $horaires = '24h/24';
+    
+    public function peutAcceder($zone) {
+        return in_array($zone, ['Zone A', 'Zone B', 'Zone VIP']);
+    }
+}
+
+// FACTORY ACCÈS PARKING
+class AccesParkingFactory {
+    public static function creer($typeEmploye) {
+        switch (strtolower($typeEmploye)) {
+            case 'employe':
+            case 'simple':
+            case 'employe_simple':
+                return new AccesEmploye();
+            
+            case 'cadre':
+                return new AccesCadre();
+            
+            case 'manager':
+            case 'cadre_manager':
+                return new AccesManager();
+            
+            default:
+                throw new InvalidArgumentException("Type d'accès parking inconnu pour : $typeEmploye");
+        }
+    }
+}
+
+// ============================================
+// 4. SYSTÈME COMPLET - EXEMPLE D'UTILISATION
+// ============================================
+
+class SystemeGestion {
+    private $utilisateurs = [];
+    private $employes = [];
+    
+    public function creerUtilisateur($type, $login, $motDePasse) {
+        $utilisateur = UtilisateurFactory::creer($type, $login, $motDePasse);
+        $this->utilisateurs[] = $utilisateur;
+        return $utilisateur;
+    }
+    
+    public function creerEmploye($type, $nom, $prenom, $email) {
+        $employe = EmployeFactory::creer($type, $nom, $prenom, $email);
+        $this->employes[] = $employe;
+        return $employe;
+    }
+    
+    public function attribuerAccesParking($employe) {
+        return AccesParkingFactory::creer($employe->getType());
+    }
+    
+    public function afficherSysteme() {
+        echo "=== SYSTÈME DE GESTION ===\n\n";
+        
+        echo "UTILISATEURS :\n";
+        foreach ($this->utilisateurs as $user) {
+            echo "- {$user->getLogin()} ({$user->getStatut()})\n";
+            echo "  Permissions : " . implode(', ', $user->getPermissions()) . "\n\n";
+        }
+        
+        echo "EMPLOYÉS :\n";
+        foreach ($this->employes as $emp) {
+            echo "- {$emp->getPrenom()} {$emp->getNom()} ({$emp->getType()})\n";
+            echo "  Salaire : {$emp->getSalaire()}€ - Prime : {$emp->calculerPrime()}€\n";
+            echo "  Responsabilités : " . implode(', ', $emp->getResponsabilites()) . "\n";
+            
+            // Accès parking automatique
+            $acces = $this->attribuerAccesParking($emp);
+            echo "  Parking : {$acces->afficherAcces()} ({$acces->getHoraires()})\n\n";
+        }
+    }
+}
+
+// ============================================
+// 5. DÉMONSTRATION
+// ============================================
+
+echo "<?php\n\n";
+echo "// DÉMONSTRATION DES FACTORIES PHP\n";
+echo "// ================================\n\n";
+
+try {
+    $systeme = new SystemeGestion();
+    
+    // Création d'utilisateurs via factory
+    $systeme->creerUtilisateur('admin', 'admin', 'motdepasse123');
+    $systeme->creerUtilisateur('editeur', 'editeur1', 'secret456');
+    $systeme->creerUtilisateur('utilisateur', 'user1', 'password789');
+    
+    // Création d'employés via factory
+    $systeme->creerEmploye('simple', 'Dupont', 'Jean', 'jean.dupont@entreprise.fr');
+    $systeme->creerEmploye('cadre', 'Martin', 'Sophie', 'sophie.martin@entreprise.fr');
+    $systeme->creerEmploye('manager', 'Durand', 'Pierre', 'pierre.durand@entreprise.fr');
+    
+    // Affichage du système complet
+    $systeme->afficherSysteme();
+    
+    // Test d'accès parking spécifique
+    echo "TEST D'ACCÈS PARKING :\n";
+    $accesManager = AccesParkingFactory::creer('manager');
+    echo "Un manager peut-il accéder à la Zone VIP ? " . 
+         ($accesManager->peutAcceder('Zone VIP') ? 'OUI' : 'NON') . "\n";
+    
+    $accesEmploye = AccesParkingFactory::creer('simple');
+    echo "Un employé peut-il accéder à la Zone VIP ? " . 
+         ($accesEmploye->peutAcceder('Zone VIP') ? 'OUI' : 'NON') . "\n";
+    
+} catch (Exception $e) {
+    echo "ERREUR : " . $e->getMessage() . "\n";
+}
+
+echo "\n// ================================\n";
+echo "// FIN DE LA DÉMONSTRATION\n";
+echo "// ================================\n";
+
+?>

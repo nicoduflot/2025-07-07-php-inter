@@ -10,6 +10,7 @@ require './src/Classes/Utrain/InternUser.php';
 require './src/Classes/CorpoInc/UtilisateurStandard.php';
 require './src/Classes/CorpoInc/Editeur.php';
 require './src/Classes/CorpoInc/Administrateur.php';
+require './src/Classes/CorpoInc/UtilisateurFactory.php';
 use App\Banque\CompteCheque;
 use App\Banque\CompteInteret;
 use JDR\Guerrier;
@@ -20,6 +21,7 @@ use App\Utrain\InternUser;
 use App\CorpoInc\UtilisateurStandard;
 use App\CorpoInc\Editeur;
 use App\CorpoInc\Administrateur;
+use App\CorpoInc\UtilisateurFactory;
 use Utils\Tools;
 
 ?>
@@ -518,6 +520,15 @@ $frere->contenuCoffre();
                 Tools::prePrint($admin->verifierMotDePasse('groscalin'));
                 Tools::prePrint($admin->verifierMotDePasse('bisounours'));
                 Tools::prePrint($admin->getPermissions());
+
+                $doudouUser = UtilisateurFactory::creer('standard', 'doudou', 'monPetitPoneyTalesOfEquestria');
+                tools::prePrint($doudouUser);
+
+                $doudouEditeur = UtilisateurFactory::creer('editeur', 'doudou', 'monPetitPoneyTalesOfEquestria');
+                tools::prePrint($doudouEditeur);
+
+                $doudouAdmin = UtilisateurFactory::creer('admin', 'doudou', 'monPetitPoneyTalesOfEquestria');
+                tools::prePrint($doudouUser);
 
                 ?>
                 </pre>

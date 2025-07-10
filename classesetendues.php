@@ -466,9 +466,6 @@ $frere->contenuCoffre();
                 <header>
                     <h2>les design pattern Factory</h2>
                 </header>
-                <!--
-                    https://tainix.fr/code/Design-Pattern-en-PHP-Factory
-                -->
                 <h3>Principe</h3>
                 <p>
                     La factory est une "usine à objets".
@@ -492,6 +489,7 @@ $frere->contenuCoffre();
                 </p>
                 <pre>
                 <?php
+                
                 ?>
                 </pre>
             </article>

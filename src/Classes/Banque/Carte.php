@@ -64,4 +64,21 @@ class Carte{
         $params = ['cardnumber' => $this->numcarte, 'codepin' => $this->codepin];
         return Tools::insertBdd($sql, $params);
     }
+
+    /* methode de suppression de la carte */
+    public function suppCarte() : bool {
+        $sql = '
+        DELETE FROM `carte` 
+        WHERE 
+            `carte`.`cardnumber` = :cardnumber 
+        AND 
+            `carte`.`codepin` = :codepin
+        ';
+        $params = [
+            'cardnumber' => $this->numcarte,
+            'codepin' => $this->codepin
+        ];
+        Tools::modBdd($sql,$params);
+        return true;
+    }
 }

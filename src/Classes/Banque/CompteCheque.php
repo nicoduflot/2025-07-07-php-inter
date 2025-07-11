@@ -144,5 +144,11 @@ class CompteCheque extends Compte{
         $this->id = Tools::insertBdd($sql, $params);
         return true;
     }
+
+    public function suppCompte() : true {
+        parent::suppCompte();
+        $this->getCarte()->suppCarte();
+        return true;
+    }
     
 }

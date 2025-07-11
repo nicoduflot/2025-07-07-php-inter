@@ -367,6 +367,7 @@ class Compte{
             'prenom'=> $this->prenom,
             'numagence'=> $this->numagence,
             'solde'=> $this->solde,
+            'decouvert'=> $this->decouvert,
         ];
         $sql = '
         UPDATE `compte` 
@@ -375,12 +376,25 @@ class Compte{
             `nom` = :nom,
             `prenom` = :prenom,
             `numagence` = :numagence,
-            `solde` = :solde
+            `solde` = :solde,
+            `decouvert` = :decouvert
 
         WHERE 
             `id` = :id
         ';
         tools::modBdd($sql, $params);
+        return true;
+    }
+
+    public function suppCompte() : true {
+        $sql = '
+        DELETE FROM `compte` 
+        WHERE `id` = :id ;
+        ';
+        $params = [
+            'id' => $this->id
+        ];
+        Tools::modBdd($sql, $params);
         return true;
     }
 

@@ -39,8 +39,8 @@ use App\Banque\CompteInteret;
                 if(isset($_POST['action']) && $_POST['action'] === 'edit'){
                     /* modification */
                     $compte = unserialize($_SESSION['compte']);
-                    Tools::prePrint($compte);
-                    Tools::prePrint($_POST);
+                    /*Tools::prePrint($compte);
+                    Tools::prePrint($_POST);*/
                     $compte->setNom($_POST['nom']);
                     $compte->setPrenom($_POST['prenom']);
                     $compte->setNumcompte($_POST['numcompte']);
@@ -62,10 +62,19 @@ use App\Banque\CompteInteret;
                         document.location.href = './classesetpdo.php';
                     </script>
                     <?php
-                    Tools::prePrint($compte);
+                    /*Tools::prePrint($compte);*/
                 }
-                if(isset($_POST['action']) && $_POST['action'] === 'suppression'){
+                if(isset($_POST['action']) && $_POST['action'] === 'supp'){
                     /* suppression */
+                    $compte = unserialize($_SESSION['compte']);
+                    /*Tools::prePrint($compte);
+                    Tools::prePrint($_POST);*/
+                    $compte->suppCompte();
+                    ?>
+                    <script>
+                        document.location.href = './classesetpdo.php';
+                    </script>
+                    <?php
                 }
 
                 /* on viens du bouton "afficher compte" */
@@ -193,7 +202,7 @@ use App\Banque\CompteInteret;
                             break;
                         case 'edit':
                             $compte = unserialize($_SESSION['compte']);
-                            tools::prePrint($compte);
+                            /*tools::prePrint($compte);*/
                         ?>
                             <form method="post" action="./gestionCompte.php">
                                 <input type="hidden" name="id" id="id" value="<?= $_GET['id'] ?>" />
@@ -269,7 +278,7 @@ use App\Banque\CompteInteret;
                                             <label for="decouvert">Découvert</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="number" readonly class="form-control" name="decouvert" id="decouvert" value="<?= $compte->getDecouvert() ?>" />
+                                            <input type="number" class="form-control" name="decouvert" id="decouvert" value="<?= $compte->getDecouvert() ?>" />
                                         </div>
                                     </div>
                                     <div class="row my-2">

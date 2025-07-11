@@ -56,8 +56,8 @@ use App\Banque\CompteInteret;
                             $compte = new CompteInteret($nom, $prenom, $numcompte, $numagence, $rib, $iban, $solde, $taux, $decouvert, $devise);
                             break;
                     }
-                    Tools::prePrint($compte);
-                    Tools::prePrint($compte->typeCompte());
+                    /*Tools::prePrint($compte);
+                    Tools::prePrint($compte->typeCompte());*/
                     $compte->insertCompte();
                     ?>
                     <h3>Le compte suivant a été enregistré : </h3>

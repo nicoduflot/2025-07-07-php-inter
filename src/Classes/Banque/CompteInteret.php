@@ -119,4 +119,30 @@ class CompteInteret extends Compte{
         return true;
     }
 
+    public function majCompte() : bool {
+        $params = [
+            'id'=> $this->getId(),
+            'nom'=>$this->nom,
+            'prenom'=> $this->prenom,
+            'numagence'=> $this->numagence,
+            'solde'=> $this->solde,
+            'taux'=> $this->taux,
+        ];
+        $sql = '
+        UPDATE `compte` 
+        SET 
+            `id` = :id,
+            `nom` = :nom,
+            `prenom` = :prenom,
+            `numagence` = :numagence,
+            `solde` = :solde,
+            `taux` = :taux
+
+        WHERE 
+            `id` = :id
+        ';
+        tools::modBdd($sql, $params);
+        return true;
+    }
+
 }

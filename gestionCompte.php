@@ -35,6 +35,39 @@ use App\Banque\CompteInteret;
                     <h2>Gestion d'un compte Compte</h2>
                 </header>
                 <?php
+                /* on arrive d'un formulaire de modification ou de suppression */
+                if(isset($_POST['action']) && $_POST['action'] === 'edit'){
+                    /* modification */
+                    $compte = unserialize($_SESSION['compte']);
+                    Tools::prePrint($compte);
+                    Tools::prePrint($_POST);
+                    $compte->setNom($_POST['nom']);
+                    $compte->setPrenom($_POST['prenom']);
+                    $compte->setNumcompte($_POST['numcompte']);
+                    $compte->setNumagence($_POST['numagence']);
+                    $compte->setRib($_POST['rib']);
+                    $compte->setIban($_POST['iban']);
+                    $compte->setSolde($_POST['solde']);
+                    $compte->setDevise($_POST['devise']);
+                    if($compte->typecompte()==='CompteCheque'){
+                        $compte->getCarte()->setNumcarte($_POST['numcarte']);
+                        $compte->getCarte()->setCodepin($_POST['codepin']);
+                    }
+                    if($compte->typeCompte()==='CompteInteret'){
+                        $compte->setTaux($_POST['taux']);
+                    }
+                    $compte->majCompte();
+                    ?>
+                    <script>
+                        document.location.href = './classesetpdo.php';
+                    </script>
+                    <?php
+                    Tools::prePrint($compte);
+                }
+                if(isset($_POST['action']) && $_POST['action'] === 'suppression'){
+                    /* suppression */
+                }
+
                 /* on viens du bouton "afficher compte" */
                 /*
                 GET avec action = show id = id du compte
@@ -99,6 +132,7 @@ use App\Banque\CompteInteret;
                                     );
                                     break;
                             }
+                            $compte->setId($idcompte);
                             $_SESSION['compte'] = serialize($compte);
                             
                             ?>
@@ -158,11 +192,13 @@ use App\Banque\CompteInteret;
 
                             break;
                         case 'edit':
+                            $compte = unserialize($_SESSION['compte']);
+                            tools::prePrint($compte);
                         ?>
                             <form method="post" action="./gestionCompte.php">
-                                <input type="hidden" name="id" id="id" value="" />
+                                <input type="hidden" name="id" id="id" value="<?= $_GET['id'] ?>" />
                                 <input type="hidden" name="action" id="action" value="edit" />
-                                <input type="hidden" name="devise" id="devise" value="" />
+                                <input type="hidden" name="devise" id="devise" value="<?= $compte->getDevise() ?>" />
                                 <fieldset class="form-control my-2">
                                     <legend>
                                         Détenteur du compte
@@ -170,11 +206,11 @@ use App\Banque\CompteInteret;
                                     <div class="row my-2">
                                         <div class="col-lg-6">
                                             <label for="nom">Nom</label>
-                                            <input type="text" class="form-control" name="nom" id="nom" value="" />
+                                            <input type="text" class="form-control" name="nom" id="nom" value="<?= $compte->getNom() ?>" />
                                         </div>
                                         <div class="col-lg-6">
                                             <label for="prenom">Prénom</label>
-                                            <input type="text" class="form-control" name="prenom" id="nom" value="" />
+                                            <input type="text" class="form-control" name="prenom" id="nom" value="<?= $compte->getprenom() ?>" />
                                         </div>
                                     </div>
                                 </fieldset>
@@ -185,7 +221,7 @@ use App\Banque\CompteInteret;
                                             <label for="numagence">Numéro d'agence</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="text" class="form-control" name="numagence" id="numagence" value="" />
+                                            <input type="text" class="form-control" name="numagence" id="numagence" value="<?= $compte->getNumagence() ?>" />
                                         </div>
                                     </div>
                                 </fieldset>
@@ -198,7 +234,7 @@ use App\Banque\CompteInteret;
                                             <label for="type">Type de compte</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input class="form-control my-2" type="text" name="type" id="type" value="" readonly />
+                                            <input class="form-control my-2" type="text" name="type" id="type" value="<?= $compte->typeCompte() ?>" readonly />
                                         </div>
                                     </div>
                                     <div class="row my-2">
@@ -206,7 +242,7 @@ use App\Banque\CompteInteret;
                                             <label for="numcompte">Numéro de compte</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input class="form-control my-2" type="text" name="numcompte" id="numcompte" value="" readonly />
+                                            <input class="form-control my-2" type="text" name="numcompte" id="numcompte" value="<?= $compte->getNumcompte() ?>" readonly />
                                         </div>
                                     </div>
                                     <div class="row my-2">
@@ -214,7 +250,7 @@ use App\Banque\CompteInteret;
                                             <label for="rib">RIB</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input class="form-control my-2" type="text" name="rib" id="rib" value="" readonly />
+                                            <input class="form-control my-2" type="text" name="rib" id="rib" value="<?= $compte->getRib() ?>" readonly />
                                         </div>
                                     </div>
                                     <div class="row my-2">
@@ -222,18 +258,26 @@ use App\Banque\CompteInteret;
                                             <label for="iban">IBAN</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input class="form-control my-2" type="iban" name="iban" id="type" value="" readonly />
+                                            <input class="form-control my-2" type="iban" name="iban" id="type" value="<?= $compte->getIban() ?>" readonly />
                                         </div>
                                     </div>
                                     <?php
-
+                                    if($compte->typeCompte()==='CompteCheque'){
                                     ?>
+                                    <div class="row my-2">
+                                        <div class="col-lg-6">
+                                            <label for="decouvert">Découvert</label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input type="number" readonly class="form-control" name="decouvert" id="decouvert" value="<?= $compte->getDecouvert() ?>" />
+                                        </div>
+                                    </div>
                                     <div class="row my-2">
                                         <div class="col-lg-6">
                                             <label for="numcarte">Numéro de carte</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="text" readonly class="form-control" name="numcarte" id="numcarte" value="" />
+                                            <input type="text" readonly class="form-control" name="numcarte" id="numcarte" value="<?= $compte->getCarte()->getNumCarte() ?>" />
                                         </div>
                                     </div>
                                     <div class="row my-2">
@@ -241,12 +285,13 @@ use App\Banque\CompteInteret;
                                             <label for="codepin">Code secret</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="text" readonly class="form-control" name="codepin" id="codepin" value="" />
+                                            <input type="text" readonly class="form-control" name="codepin" id="codepin" value="<?= $compte->getCarte()->getCodepin() ?>" />
                                         </div>
                                     </div>
                                     <?php
 
-
+                                    }
+                                     if($compte->typeCompte()==='CompteInteret'){
                                     ?>
                                     <div class="row my-2">
                                         <div class="col-lg-6">
@@ -255,13 +300,16 @@ use App\Banque\CompteInteret;
                                         <div class="col-lg-6">
                                             <select class="form-select" name="taux" id="taux">
                                                 <option>Choisir le taux d'intéret</option>
-                                                <option <?php  ?> value="0.015">1.5%</option>
-                                                <option <?php  ?> value="0.03">3%</option>
-                                                <option <?php  ?> value="0.05">5%</option>
+                                                <option <?= ($compte->getTaux() === 0.015)? 'selected': '' ?> value="0.015">1.5%</option>
+                                                <option <?= ($compte->getTaux() === 0.03)? 'selected': '' ?> value="0.03">3%</option>
+                                                <option <?= ($compte->getTaux() === 0.05)? 'selected': '' ?> value="0.05">5%</option>
                                             </select>
                                         </div>
                                     </div>
                                     <?php
+
+                                     }
+
 
                                     ?>
                                     <div class="row my-2">
@@ -269,7 +317,7 @@ use App\Banque\CompteInteret;
                                             <label for="solde">Solde</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="number" class="form-control" name="solde" id="solde" value="" />
+                                            <input type="number" class="form-control" name="solde" id="solde" value="<?= $compte->getSolde() ?>" />
                                         </div>
                                     </div>
                                 </fieldset>
@@ -288,13 +336,13 @@ use App\Banque\CompteInteret;
                         case 'supp':
                         ?>
                             <form method="post" action="./gestionCompte.php">
-                                <input type="hidden" name="id" id="id" value="" />
+                                <input type="hidden" name="id" id="id" value="<?= $_GET['id'] ?>" />
                                 <input type="hidden" name="action" id="action" value="supp" />
                                 <p>
                                     <button class="btn btn-outline-success btn-small" type="submit">
                                         Valider la suppression
                                     </button>
-                                    <a href="./gestionCompte.php?action=show&id="><button class="btn btn-outline-secondary btn-small" type="button">Annuler</button></a>
+                                    <a href="./gestionCompte.php?action=show&id=<?= $_GET['id'] ?>"><button class="btn btn-outline-secondary btn-small" type="button">Annuler</button></a>
                                 </p>
                             </form>
                 <?php
@@ -305,9 +353,9 @@ use App\Banque\CompteInteret;
                 ?>
                 <p>
                     <a href="./classesetpdo.php" title="Retour à la liste des compte"><button class="btn btn-secondary btn-small"><i class="bi bi-list"></i></button></a>
-                    <a href="./gestionCompte.php?action=show&id=<?php  ?>" title="Voir le compte"><button class="btn btn-success btn-small"><i class="bi bi-card-text"></i></button></a>
-                    <a href="./gestionCompte.php?action=edit&id=<?php  ?>" title="Éditer le compte"><button class="btn btn-secondary btn-small"><i class="bi bi-pencil-fill"></i></button></a>
-                    <a href="./gestionCompte.php?action=supp&id=<?php  ?>" title="Supprimer le compte"><button class="btn btn-danger btn-small"><i class="bi bi-trash-fill"></i></button></a>
+                    <a href="./gestionCompte.php?action=show&id=<?= $_GET['id'] ?>" title="Voir le compte"><button class="btn btn-success btn-small"><i class="bi bi-card-text"></i></button></a>
+                    <a href="./gestionCompte.php?action=edit&id=<?= $_GET['id'] ?>" title="Éditer le compte"><button class="btn btn-secondary btn-small"><i class="bi bi-pencil-fill"></i></button></a>
+                    <a href="./gestionCompte.php?action=supp&id=<?= $_GET['id'] ?>" title="Supprimer le compte"><button class="btn btn-danger btn-small"><i class="bi bi-trash-fill"></i></button></a>
                 </p>
             </article>
             <?php

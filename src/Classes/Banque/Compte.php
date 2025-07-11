@@ -248,6 +248,26 @@ class Compte{
         return $this;
     }
 
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     /* Méthodes de l'objet */
     public function modifierSolde(float $montant): void{
         $this->setSolde($this->getSolde() + $montant);
@@ -340,6 +360,30 @@ class Compte{
         return true;
     }
 
+    public function majCompte() : bool {
+        $params = [
+            'id'=> $this->getId(),
+            'nom'=>$this->nom,
+            'prenom'=> $this->prenom,
+            'numagence'=> $this->numagence,
+            'solde'=> $this->solde,
+        ];
+        $sql = '
+        UPDATE `compte` 
+        SET 
+            `id` = :id,
+            `nom` = :nom,
+            `prenom` = :prenom,
+            `numagence` = :numagence,
+            `solde` = :solde
+
+        WHERE 
+            `id` = :id
+        ';
+        tools::modBdd($sql, $params);
+        return true;
+    }
+
 
     /*  Méthode static de l'objet*/
     public static function helloWorld(){
@@ -355,4 +399,6 @@ class Compte{
     {
         // auto-sauvegarde de l'objet en bdd
     }
+
+    
 }

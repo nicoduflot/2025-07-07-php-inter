@@ -99,6 +99,18 @@ use Utils\Tools;
                     <h2>Les comptes chèques enregistrés</h2>
                 </header>
                 <?php
+                $sqlCompteCheque = '
+                    SELECT 
+                        * 
+                    FROM 
+                        `compte` LEFT JOIN 
+                        `carte` ON `compte`.`cardid` = `carte`.`id` 
+                    WHERE 
+                        `typecompte` = \'CompteCheque\' 
+                    ORDER BY 
+                        `compte`.`nom`; 
+                    ';
+                $request = Tools::modBdd($sqlCompteCheque);
                 ?>
                 <div class="table-responsive">
                     <table class="table table-dark table-striped">
@@ -119,23 +131,24 @@ use Utils\Tools;
                         </thead>
                         <tbody>
                             <?php
+                            while($compte = $request->fetch(PDO::FETCH_ASSOC)){
                             ?>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><a href="./gestionCompte.php?action=show&uniqueid=" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
+                                    <td><?php echo $compte['nom'] ?></td>
+                                    <td><?php echo $compte['prenom'] ?></td>
+                                    <td><?php echo $compte['numcompte'] ?></td>
+                                    <td><?php echo $compte['numagence'] ?></td>
+                                    <td><?php echo $compte['rib'] ?></td>
+                                    <td><?php echo $compte['iban'] ?></td>
+                                    <td><?php echo $compte['solde'] ?></td>
+                                    <td><?php echo $compte['decouvert'] ?></td>
+                                    <td><?php echo $compte['cardnumber'] ?></td>
+                                    <td><?php echo $compte['codepin'] ?></td>
+                                    <td><a href="./gestionCompte.php?action=show&id=<?= $compte['id'] ?>" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
                                     </td>
                                 </tr>
                             <?php
-                            
+                            }
                             ?>
                         </tbody>
                     </table>
@@ -146,6 +159,11 @@ use Utils\Tools;
                     <h2>Les comptes intérêts enregistrés</h2>
                 </header>
                 <?php
+                 $sqlCompteInteret = '
+                    SELECT * FROM `compte` 
+                    WHERE `typecompte` = \'CompteInteret\'
+                    ORDER BY `compte`.`nom`;';
+                $request = Tools::modBdd($sqlCompteInteret);
                 ?>
                 <div class="table-responsive">
                     <table class="table table-dark table-striped">
@@ -164,22 +182,23 @@ use Utils\Tools;
                         </thead>
                         <tbody>
                             <?php
+                            while ($compte = $request->fetch(PDO::FETCH_ASSOC)) {
                             ?>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?php echo $compte['nom'] ?></td>
+                                    <td><?php echo $compte['prenom'] ?></td>
+                                    <td><?php echo $compte['numcompte'] ?></td>
+                                    <td><?php echo $compte['numagence'] ?></td>
+                                    <td><?php echo $compte['rib'] ?></td>
+                                    <td><?php echo $compte['iban'] ?></td>
+                                    <td><?php echo $compte['solde'] ?></td>
+                                    <td><?php echo $compte['taux'] ?></td>
                                     <td>
-                                        <a href="./gestionCompte.php?action=show&uniqueid=<?php  ?>" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
+                                        <a href="./gestionCompte.php?action=show&id=<?= $compte['id'] ?>" title="Voir le compte"><button class="btn btn-primary btn-small"><i class="bi bi-card-text"></i></button></a>
                                     </td>
                                 </tr>
-
                             <?php
+                            }
                             ?>
                         </tbody>
                     </table>

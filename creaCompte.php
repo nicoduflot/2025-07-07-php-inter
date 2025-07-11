@@ -43,21 +43,26 @@ use App\Banque\CompteInteret;
                     $iban = 'IBAN - '. $numagence . '-' . $numcompte . ' FR';
                     $solde = $_POST['solde'];
                     $decouvert = (isset($_POST['decouvert']))?$_POST['decouvert'] : 0;
-                    $decouvert = '€';
+                    $devise = '€';
                     switch($typeCompte){
                         case 'Compte':
-                            $compte = new Compte($nom, $prenom, $numcompte, $numagence, $rib, $iban, $solde, $decouvert, $decouvert);
                             break;
+                            $compte = new Compte($nom, $prenom, $numcompte, $numagence, $rib, $iban, $solde, $decouvert, $devise);
                         case 'CompteCheque':
+                            $compte = new CompteCheque($nom, $prenom, $numcompte, $numagence, $rib, $iban, $_POST['numcarte'], $_POST['codepin'], $solde, $decouvert, $devise);
                             break;
                         case 'CompteInteret':
+                            $taux = floatval($_POST['taux']);
+                            $compte = new CompteInteret($nom, $prenom, $numcompte, $numagence, $rib, $iban, $solde, $taux, $decouvert, $devise);
                             break;
                     }
-                    
+                    Tools::prePrint($compte);
+                    Tools::prePrint($compte->typeCompte());
+                    $compte->insertCompte();
                     ?>
                     <h3>Le compte suivant a été enregistré : </h3>
                         <?php
-                        
+                        echo $compte->infoCompte();
                         ?>
                     <p>
                         <a href="./classesetpdo.php"><button class="btn btn-outline-secondary btn-small" type="button">Retour à la page des comptes</button></a>
@@ -135,7 +140,7 @@ use App\Banque\CompteInteret;
                                             <label for="numcarte">Numéro de carte</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="text" readonly class="form-control" name="numcarte" id="numcarte" value="" />
+                                            <input type="text" readonly class="form-control" name="numcarte" id="numcarte" value="<?= CompteCheque::generateCardNumber() ?>" />
                                         </div>
                                     </div>
                                     <div class="row my-2">
@@ -143,7 +148,7 @@ use App\Banque\CompteInteret;
                                             <label for="codepin">Code secret</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="text" readonly class="form-control" name="codepin" id="codepin" value="" />
+                                            <input type="text" readonly class="form-control" name="codepin" id="codepin" value="<?= CompteCheque::generatePin() ?>" />
                                         </div>
                                     </div>
                                 <?php

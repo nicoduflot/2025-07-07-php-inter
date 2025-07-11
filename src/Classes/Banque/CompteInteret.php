@@ -1,6 +1,8 @@
 <?php
 namespace App\Banque;
 
+use Utils\Tools;
+
 class CompteInteret extends Compte{
     private $taux;
     public function __construct(
@@ -71,6 +73,50 @@ class CompteInteret extends Compte{
         return $message;
     }
 
-    /*  méthode de sauvegarde du compte */
+    /* Méthodes de sauvegarde de l'objet en BDD */
+    public function insertCompte() : bool {
+        $params = [
+            'typecompte'=> $this->typeCompte(),
+            'nom'=>$this->nom,
+            'prenom'=> $this->prenom,
+            'numcompte'=> $this->numcompte,
+            'numagence'=> $this->numagence,
+            'rib'=> $this->rib,
+            'iban'=> $this->iban,
+            'solde'=> $this->solde,
+            'taux'=> $this->taux,
+            'devise'=> $this->devise,
+            'decouvert'=>$this->decouvert
+        ];
+        $sql = '
+            INSERT INTO `compte` (
+                `typecompte`,
+                `nom`,
+                `prenom`,
+                `numcompte`,
+                `numagence`,
+                `rib`,
+                `iban`,
+                `solde`,
+                `taux`,
+                `devise`,
+                `decouvert`
+            ) VALUES (
+                :typecompte,
+                :nom,
+                :prenom,
+                :numcompte,
+                :numagence,
+                :rib,
+                :iban,
+                :solde,
+                :taux,
+                :devise,
+                :decouvert
+            );
+        ';
+        $this->id = Tools::insertBdd($sql, $params);
+        return true;
+    }
 
 }

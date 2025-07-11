@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Banque;
+use Utils\Tools;
 
 class Compte{
     /* Attributs en privé */
@@ -13,6 +14,7 @@ class Compte{
     protected float $solde;
     protected float $decouvert;
     protected string $devise;
+    protected $id;
 
     /**
      * @param string $nom - le nom du détenteur du compte
@@ -54,6 +56,7 @@ class Compte{
         $this->solde = $solde;
         $this->decouvert = $decouvert;
         $this->devise = $devise;
+        $this->id = null;
     }
 
     /*
@@ -272,6 +275,8 @@ class Compte{
 
     public function typeCompte() : string {
         $className = get_class($this);
+        $namespace = __NAMESPACE__.'\\';
+        $className = str_replace($namespace, '', $className);
         return $className;
     }
 
@@ -293,8 +298,48 @@ class Compte{
     }
 
     /* Méthodes de sauvegarde de l'objet en BDD */
+    public function insertCompte() : bool {
+        $params = [
+            'typecompte'=> $this->typeCompte(),
+            'nom'=>$this->nom,
+            'prenom'=> $this->prenom,
+            'numcompte'=> $this->numcompte,
+            'numagence'=> $this->numagence,
+            'rib'=> $this->rib,
+            'iban'=> $this->iban,
+            'solde'=> $this->solde,
+            'devise'=> $this->devise,
+            'decouvert'=>$this->decouvert
+        ];
+        $sql = '
+            INSERT INTO `compte` (
+                `typecompte`,
+                `nom`,
+                `prenom`,
+                `numcompte`,
+                `numagence`,
+                `rib`,
+                `iban`,
+                `solde`,
+                `devise`,
+                `decouvert`
+            ) VALUES (
+                :typecompte,
+                :nom,
+                :prenom,
+                :numcompte,
+                :numagence,
+                :rib,
+                :iban,
+                :solde,
+                :devise,
+                :decouvert
+            );
+        ';
+        $this->id = Tools::insertBdd($sql, $params);
+        return true;
+    }
 
-    
 
     /*  Méthode static de l'objet*/
     public static function helloWorld(){

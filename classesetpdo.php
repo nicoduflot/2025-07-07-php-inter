@@ -101,7 +101,7 @@ use Utils\Tools;
                 <?php
                 $sqlCompteCheque = '
                     SELECT 
-                        * 
+                        `compte`.*, `carte`.`cardnumber`, `carte`.`codepin`
                     FROM 
                         `compte` LEFT JOIN 
                         `carte` ON `compte`.`cardid` = `carte`.`id` 

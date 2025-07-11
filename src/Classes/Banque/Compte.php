@@ -294,6 +294,8 @@ class Compte{
 
     /* Méthodes de sauvegarde de l'objet en BDD */
 
+    
+
     /*  Méthode static de l'objet*/
     public static function helloWorld(){
         return 'Hello World';

@@ -1,5 +1,10 @@
 <?php
-
+session_start();
+include './src/includes/autoload.php';
+use Utils\Tools;
+use App\Banque\Compte;
+use App\Banque\CompteCheque;
+use App\Banque\CompteInteret;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -27,6 +32,28 @@
                     <h2>Création d'un compte</h2>
                 </header>
                 <?php
+                if( isset($_POST['type']) ){
+                    $typeCompte = $_POST['type'];
+                    $nom = $_POST['nom'];
+                    $prenom = $_POST['prenom'];
+                    $date = new DateTimeImmutable();
+                    $numcompte = $date->format('Y-m-d') . '-' . time();
+                    $numagence = $_POST['numagence'];
+                    $rib = 'RIB - '. $numagence . '-' . $numcompte;
+                    $iban = 'IBAN - '. $numagence . '-' . $numcompte . ' FR';
+                    $solde = $_POST['solde'];
+                    $decouvert = (isset($_POST['decouvert']))?$_POST['decouvert'] : 0;
+                    $decouvert = '€';
+                    switch($typeCompte){
+                        case 'Compte':
+                            $compte = new Compte($nom, $prenom, $numcompte, $numagence, $rib, $iban, $solde, $decouvert, $decouvert);
+                            break;
+                        case 'CompteCheque':
+                            break;
+                        case 'CompteInteret':
+                            break;
+                    }
+                    
                     ?>
                     <h3>Le compte suivant a été enregistré : </h3>
                         <?php
@@ -36,8 +63,9 @@
                         <a href="./classesetpdo.php"><button class="btn btn-outline-secondary btn-small" type="button">Retour à la page des comptes</button></a>
                     </p>
                     <?php
-               
-                ?>
+                }else{
+                    $typeCompte = (isset($_GET['typecompte']))? $_GET['typecompte'] : null;
+                    ?>
                     <form method="post">
                         <fieldset class="form-control my-2">
                             <legend>
@@ -74,12 +102,25 @@
                                     <label for="type">Type compte</label>
                                 </div>
                                 <div class="col-lg-6">
-                                    <input type="hidden" name="type" id="type" value="" readonly />
-                                    
+                                    <input type="hidden" name="type" id="type" value="<?= $typeCompte ?>" readonly />
+                                    <?= $typeCompte ?>
                                 </div>
                             </div>
                             <?php
-                            
+                            switch($typeCompte){
+                                case 'Compte';
+                                    ?>
+                                    <div class="row my-2">
+                                        <div class="col-lg-6">
+                                            <label for="numcarte">Découvert autorisé</label>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <input type="text" class="form-control" name="decouvert" id="decouvert" value="0" />
+                                        </div>
+                                    </div>
+                                    <?php
+                                    break;
+                                case 'CompteCheque':
                                     ?>
                                     <div class="row my-2">
                                         <div class="col-lg-6">
@@ -94,7 +135,7 @@
                                             <label for="numcarte">Numéro de carte</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="text" readonly class="form-control" name="numcarte" id="numcarte" value="<?php echo $numcarte ?>" />
+                                            <input type="text" readonly class="form-control" name="numcarte" id="numcarte" value="" />
                                         </div>
                                     </div>
                                     <div class="row my-2">
@@ -102,19 +143,13 @@
                                             <label for="codepin">Code secret</label>
                                         </div>
                                         <div class="col-lg-6">
-                                            <input type="text" readonly class="form-control" name="codepin" id="codepin" value="<?php echo $codepin ?>" />
+                                            <input type="text" readonly class="form-control" name="codepin" id="codepin" value="" />
                                         </div>
                                     </div>
                                 <?php
+                                    break;
+                                case 'CompteInteret':
                                     ?>
-                                    <div class="row my-2">
-                                        <div class="col-lg-6">
-                                            <label for="numcarte">Découvert autorisé</label>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <input type="text" readonly class="form-control" name="decouvert" id="decouvert" value="0" />
-                                        </div>
-                                    </div>
                                     <div class="row my-2">
                                         <div class="col-lg-6">
                                             <label for="taux">Taux d'intérêts</label>
@@ -128,8 +163,15 @@
                                             </select>
                                         </div>
                                     </div>
-                                <?php
-                                    
+                                    <?php
+                                    break;
+                                default:
+                                    ?>
+                                    <script>
+                                        document.location.href = './classesetpdo.php';
+                                    </script>
+                                    <?php
+                            }
                             ?>
                             <div class="row my-2">
                                 <div class="col-lg-6">
@@ -151,6 +193,7 @@
                         </p>
                     </form>
                 <?php
+                }
                 ?>
             </article>
 
